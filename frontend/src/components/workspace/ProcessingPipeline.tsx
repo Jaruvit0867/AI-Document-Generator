@@ -7,7 +7,7 @@ interface ProcessingPipelineProps {
   projectId: number;
   hasDocuments: boolean;
   isExtracted?: boolean;
-  onComplete: () => void;
+  onComplete: () => void | Promise<void>;
 }
 
 const getInitialStatuses = (
@@ -77,7 +77,7 @@ export const ProcessingPipeline: React.FC<ProcessingPipelineProps> = ({
       setHasLocalCompletion(true);
 
       setCurrentStep(null);
-      onComplete();
+      await onComplete();
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to generate proposal';
       setError(errorMessage);

@@ -8,11 +8,12 @@ import { Loading } from '@/components/ui';
 
 interface ResultsPanelProps {
   project: Project;
+  refreshKey?: number;
 }
 
 type TabType = 'proposal' | 'diagrams' | 'chat';
 
-export const ResultsPanel: React.FC<ResultsPanelProps> = ({ project }) => {
+export const ResultsPanel: React.FC<ResultsPanelProps> = ({ project, refreshKey = 0 }) => {
   const [activeTab, setActiveTab] = useState<TabType>('proposal');
   const [diagrams, setDiagrams] = useState<Diagram[]>([]);
   const [isLoadingDiagrams, setIsLoadingDiagrams] = useState(false);
@@ -48,11 +49,11 @@ export const ResultsPanel: React.FC<ResultsPanelProps> = ({ project }) => {
     }
   }, [project.id]);
 
-  // Preload diagrams and documents on mount for smooth tab switching
+  // Preload diagrams and documents on mount, and refresh after regeneration.
   useEffect(() => {
     loadDiagrams();
     loadDocuments();
-  }, [loadDiagrams, loadDocuments]);
+  }, [loadDiagrams, loadDocuments, refreshKey]);
 
   // Also load when tab changes (for refresh scenarios)
   useEffect(() => {
@@ -148,6 +149,7 @@ export const ResultsPanel: React.FC<ResultsPanelProps> = ({ project }) => {
           <ProposalView
             proposal={project.extraction_result}
             projectName={project.name}
+            diagrams={diagrams}
           />
         )}
 

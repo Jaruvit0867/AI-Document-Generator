@@ -12,7 +12,7 @@ import { Loading } from '@/components/ui';
 interface WorkspaceLayoutProps {
   project: Project;
   onProjectDeleted: () => void;
-  onProjectUpdated: () => void;
+  onProjectUpdated: () => void | Promise<void>;
 }
 
 export const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({
@@ -24,6 +24,7 @@ export const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({
   const [documents, setDocuments] = useState<Document[]>([]);
   const [isLoadingDocuments, setIsLoadingDocuments] = useState(true);
   const [isUploading, setIsUploading] = useState(false);
+  const [resultsRefreshKey, setResultsRefreshKey] = useState(0);
   const [error, setError] = useState('');
 
   // Update local project state when prop changes
@@ -97,8 +98,15 @@ export const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({
     }
   };
 
-  const handlePipelineComplete = () => {
-    onProjectUpdated();
+  const handlePipelineComplete = async () => {
+    try {
+      const updatedProject = await api.projects.get(currentProject.id);
+      setCurrentProject(updatedProject);
+      setResultsRefreshKey((key) => key + 1);
+      await onProjectUpdated();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to refresh generated plan');
+    }
   };
 
   const hasExtraction = Boolean(currentProject.extraction_result);
@@ -160,7 +168,7 @@ export const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({
           {/* Results Panel - Show after extraction is complete */}
           {hasExtraction && (
             <div className="mt-8">
-              <ResultsPanel project={currentProject} />
+              <ResultsPanel project={currentProject} refreshKey={resultsRefreshKey} />
             </div>
           )}
         </div>

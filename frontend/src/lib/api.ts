@@ -64,7 +64,7 @@ async function handleResponse<T>(response: Response): Promise<T> {
   if (response.status === 401) {
     clearToken();
     if (typeof window !== 'undefined') {
-      window.location.href = '/login';
+      window.location.href = '/auth/login';
     }
     throw new APIClientError('Unauthorized - please login again', 401);
   }
