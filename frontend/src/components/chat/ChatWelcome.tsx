@@ -2,7 +2,11 @@
 
 import React from 'react';
 
-export default function ChatWelcome() {
+interface ChatWelcomeProps {
+  onSuggestionClick?: (message: string) => void;
+}
+
+export default function ChatWelcome({ onSuggestionClick }: ChatWelcomeProps) {
   const suggestions = [
     'What are the main features of this project?',
     'Explain the system architecture',
@@ -50,13 +54,14 @@ export default function ChatWelcome() {
           </p>
           <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
             {suggestions.map((suggestion, index) => (
-              <div
+              <button
                 key={index}
-                className="rounded-lg border border-border bg-surface-raised p-3 text-left text-sm text-ink-muted transition-colors hover:bg-border/20"
+                onClick={() => onSuggestionClick?.(suggestion)}
+                className="group rounded-lg border border-border bg-surface-raised p-3 text-left text-sm text-ink-muted transition-all hover:border-accent/30 hover:bg-accent-soft/50 hover:text-accent hover:shadow-[0_0_12px_-3px_rgba(124,58,237,0.12)]"
               >
-                <span className="mr-2 text-accent">→</span>
+                <span className="mr-2 text-accent transition-transform group-hover:translate-x-0.5 inline-block">→</span>
                 {suggestion}
-              </div>
+              </button>
             ))}
           </div>
         </div>

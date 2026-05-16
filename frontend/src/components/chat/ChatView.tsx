@@ -154,7 +154,7 @@ export default function ChatView({
 
   if (isInitialLoading) {
     return (
-      <div className="flex flex-1 items-center justify-center">
+      <div className="flex flex-1 items-center justify-center p-16">
         <div className="text-center">
           <div className="mb-4 inline-block h-8 w-8 animate-spin rounded-full border-b-2 border-accent" />
           <p className="text-sm text-ink-muted">Loading chat history...</p>
@@ -204,7 +204,7 @@ export default function ChatView({
 
       {/* Chat content */}
       {messages.length === 0 ? (
-        <ChatWelcome />
+        <ChatWelcome onSuggestionClick={handleSendMessage} />
       ) : (
         <ChatHistory messages={messages} isLoading={isLoading} />
       )}
