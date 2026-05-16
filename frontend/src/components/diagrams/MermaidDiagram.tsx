@@ -7,10 +7,10 @@ interface MermaidDiagramProps {
   id: string;
 }
 
-const BASE_SCALE = 1.6;
-const MIN_SCALE = 0.3;
-const MAX_SCALE = 6.4;
-const ZOOM_STEP = 0.2;
+const BASE_SCALE = 2.56; // visual size equivalent of old 160%, now shown as 100%
+const MIN_SCALE = 0.5;
+const MAX_SCALE = 10;
+const ZOOM_STEP = 0.3;
 
 interface Stroke {
   points: { x: number; y: number }[];
@@ -49,8 +49,11 @@ export const MermaidDiagram: React.FC<MermaidDiagramProps> = ({ content, id }) =
   const stableId = useId();
 
   // Pan/zoom
-  const [scale, setScale] = useState(BASE_SCALE);
-  const [translate, setTranslate] = useState({ x: 0, y: 0 });
+  const DEFAULT_SCALE = BASE_SCALE; // starts at 100%
+  const DEFAULT_TRANSLATE = { x: 0, y: 140 };
+
+  const [scale, setScale] = useState(DEFAULT_SCALE);
+  const [translate, setTranslate] = useState(DEFAULT_TRANSLATE);
   const [isDragging, setIsDragging] = useState(false);
   const dragStart = useRef({ x: 0, y: 0 });
   const translateStart = useRef({ x: 0, y: 0 });
@@ -121,9 +124,9 @@ export const MermaidDiagram: React.FC<MermaidDiagramProps> = ({ content, id }) =
   }, [strokes, currentStroke, scale, translate, diagramToScreen, isFullscreen]);
 
   const resetView = useCallback(() => {
-    setScale(BASE_SCALE);
-    setTranslate({ x: 0, y: 0 });
-  }, []);
+    setScale(DEFAULT_SCALE);
+    setTranslate(DEFAULT_TRANSLATE);
+  }, [DEFAULT_SCALE, DEFAULT_TRANSLATE]);
 
   const zoomIn = useCallback(() => setScale(s => Math.min(s + ZOOM_STEP, MAX_SCALE)), []);
   const zoomOut = useCallback(() => setScale(s => Math.max(s - ZOOM_STEP, MIN_SCALE)), []);
@@ -355,7 +358,7 @@ export const MermaidDiagram: React.FC<MermaidDiagramProps> = ({ content, id }) =
       onPointerLeave={handlePointerUp}
       className="mermaid-container relative overflow-hidden rounded-xl border border-border shadow-inner shadow-black/[0.02]"
       style={{
-        minHeight: isFullscreen ? 'calc(100vh - 56px)' : '400px',
+        minHeight: isFullscreen ? 'calc(100vh - 56px)' : '600px',
         cursor: isDragging ? 'grabbing' : showAnnoLayer ? 'crosshair' : 'grab',
         backgroundImage: 'radial-gradient(circle, rgba(148,163,184,0.15) 1px, transparent 1px)',
         backgroundSize: '20px 20px',
@@ -525,8 +528,8 @@ export const MermaidDiagram: React.FC<MermaidDiagramProps> = ({ content, id }) =
             setStrokes([]);
             setNotes([]);
             setCurrentStroke(null);
-            setScale(BASE_SCALE);
-            setTranslate({ x: 0, y: 0 });
+            setScale(DEFAULT_SCALE);
+            setTranslate(DEFAULT_TRANSLATE);
             setIsFullscreen(true);
           }}
           className="absolute top-3 right-3 z-20 flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-surface-raised/90 text-ink-muted shadow-lg shadow-black/[0.06] backdrop-blur-sm transition-all hover:bg-surface hover:text-accent hover:ring-1 hover:ring-accent/20"

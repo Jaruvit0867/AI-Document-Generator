@@ -68,10 +68,12 @@ export const DiagramView: React.FC<DiagramViewProps> = ({ diagrams }) => {
           <h3 className="mb-4 text-base font-semibold text-ink">
             {activeDiagram.title}
           </h3>
-          <MermaidDiagram
-            content={activeDiagram.mermaid_content}
-            id={`diagram-${activeDiagram.diagram_type}-${activeDiagram.id}`}
-          />
+          <div className="-mx-4 -mb-4 overflow-hidden border-t border-border sm:-mx-6 sm:-mb-6">
+            <MermaidDiagram
+              content={activeDiagram.mermaid_content}
+              id={`diagram-${activeDiagram.diagram_type}-${activeDiagram.id}`}
+            />
+          </div>
         </div>
 
         <DiagramControls
