@@ -3,11 +3,15 @@
 import Link from 'next/link';
 import React from 'react';
 import { motion } from './Motion';
+import { InteractiveGrid } from './InteractiveGrid';
 
 export const AuthShell = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top_left,rgba(124,58,237,0.08),transparent_40%),linear-gradient(180deg,var(--surface)_0%,#FFFFFF_100%)] text-ink">
-      <div className="mx-auto grid min-h-screen max-w-7xl gap-10 px-5 py-8 sm:px-6 lg:grid-cols-[1fr_0.86fr] lg:px-8">
+    <div className="relative min-h-screen bg-surface text-ink">
+      {/* Interactive dot grid background */}
+      <InteractiveGrid />
+
+      <div className="relative mx-auto grid min-h-screen max-w-7xl gap-10 px-5 py-8 sm:px-6 lg:grid-cols-[1fr_0.86fr] lg:px-8">
         <div className="hidden flex-col justify-between rounded-3xl border border-border bg-white/70 p-8 shadow-2xl shadow-ink/[0.04] backdrop-blur-xl lg:flex">
           <Link href="/" className="flex items-center gap-3">
             <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-ink text-white">
@@ -78,7 +82,10 @@ export const AuthShell = ({ children }: { children: React.ReactNode }) => {
             >
               {children}
             </motion.div>
-            <p className="mt-6 text-center text-xs text-ink-faint">
+            <p className="mt-6 inline-flex items-center gap-2 rounded-full bg-surface-raised/80 px-5 py-2 text-xs font-semibold tracking-wide text-ink-muted ring-1 ring-border backdrop-blur-sm" style={{ textShadow: '0 0 12px rgba(124, 58, 237, 0.06)' }}>
+              <svg className="h-3.5 w-3.5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m5-9v10a2 2 0 01-2 2H6a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h6a2 2 0 012 2z" />
+              </svg>
               Requirement-to-Development Plan Generator
             </p>
           </div>
