@@ -15,7 +15,7 @@ export default function ChatError({ message, onRetry, type = 'error' }: ChatErro
       case 'no-documents':
         return (
           <svg
-            className="w-12 h-12 text-yellow-500"
+            className="w-12 h-12 text-warning"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -32,7 +32,7 @@ export default function ChatError({ message, onRetry, type = 'error' }: ChatErro
       case 'no-embeddings':
         return (
           <svg
-            className="w-12 h-12 text-yellow-500"
+            className="w-12 h-12 text-warning"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -49,7 +49,7 @@ export default function ChatError({ message, onRetry, type = 'error' }: ChatErro
       default:
         return (
           <svg
-            className="w-12 h-12 text-red-500"
+            className="w-12 h-12 text-error"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -97,12 +97,12 @@ export default function ChatError({ message, onRetry, type = 'error' }: ChatErro
         </div>
 
         {/* Title */}
-        <h3 className="mb-2 text-xl font-semibold text-slate-950">
+        <h3 className="mb-2 text-xl font-semibold text-ink">
           {getTitle()}
         </h3>
 
         {/* Description */}
-        <p className="mb-6 text-sm leading-6 text-slate-600">
+        <p className="mb-6 text-sm leading-6 text-ink-muted">
           {getDescription()}
         </p>
 
@@ -115,11 +115,11 @@ export default function ChatError({ message, onRetry, type = 'error' }: ChatErro
 
         {/* Instructions for no-documents and no-embeddings */}
         {(type === 'no-documents' || type === 'no-embeddings') && (
-          <div className="mt-6 rounded-lg border border-slate-200 bg-slate-50 p-4 text-left">
-            <p className="mb-2 text-sm font-medium text-slate-950">
+          <div className="mt-6 rounded-lg border border-border bg-surface p-4 text-left">
+            <p className="mb-2 text-sm font-medium text-ink">
               To enable chat:
             </p>
-            <ol className="list-inside list-decimal space-y-1 text-sm text-slate-700">
+            <ol className="list-inside list-decimal space-y-1 text-sm text-ink-muted">
               {type === 'no-documents' && (
                 <>
                   <li>Go to the Input tab</li>
@@ -143,5 +143,3 @@ export default function ChatError({ message, onRetry, type = 'error' }: ChatErro
     </div>
   );
 }
-
-// Made with Bob

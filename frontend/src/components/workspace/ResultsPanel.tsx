@@ -99,24 +99,24 @@ export const ResultsPanel: React.FC<ResultsPanelProps> = ({ project, refreshKey 
   ];
 
   return (
-    <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm shadow-slate-950/[0.03]">
-      <div className="border-b border-slate-200 px-5 py-4 sm:px-6">
+    <div className="overflow-hidden rounded-2xl border border-border bg-surface-raised shadow-sm shadow-black/[0.03]">
+      <div className="border-b border-border px-5 py-4 sm:px-6">
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div>
-            <h2 className="text-base font-semibold text-slate-950">Generated Workspace</h2>
-            <p className="mt-1 text-sm text-slate-500">
-              Review proposal content, diagrams, and project chat in one place.
+            <h2 className="text-base font-semibold text-ink">Generated Outputs</h2>
+            <p className="mt-1 text-sm text-ink-faint">
+              Review, chat, and export.
             </p>
           </div>
-          <div className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700 ring-1 ring-inset ring-emerald-200">
+          <div className="rounded-full bg-success-soft px-3 py-1 text-xs font-medium text-success ring-1 ring-inset ring-success/20">
             Extraction complete
           </div>
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="border-b border-slate-200 px-4 py-3">
-        <nav className="grid gap-2 rounded-lg bg-slate-100 p-1 sm:inline-grid sm:grid-cols-3" aria-label="Results tabs">
+      <div className="border-b border-border px-4 py-3">
+        <nav className="grid gap-2 rounded-lg bg-border/30 p-1 sm:inline-grid sm:grid-cols-3" aria-label="Results tabs">
           {tabs.map((tab) => (
             <button
               key={tab.id}
@@ -125,8 +125,8 @@ export const ResultsPanel: React.FC<ResultsPanelProps> = ({ project, refreshKey 
                 inline-flex items-center justify-center gap-2 rounded-md px-4 py-2.5 text-sm font-medium transition-colors
                 ${
                   activeTab === tab.id
-                    ? 'bg-white text-blue-700 shadow-sm'
-                    : 'text-slate-600 hover:text-slate-950'
+                    ? 'bg-surface-raised text-accent shadow-sm'
+                    : 'text-ink-muted hover:text-ink'
                 }
               `}
             >
@@ -140,7 +140,7 @@ export const ResultsPanel: React.FC<ResultsPanelProps> = ({ project, refreshKey 
       {/* Tab Content */}
       <div className="p-4 sm:p-6">
         {error && (
-          <div className="mb-4 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+          <div className="mb-4 rounded-lg border border-error/30 bg-error-soft p-4 text-sm text-error">
             {error}
           </div>
         )}
@@ -167,7 +167,7 @@ export const ResultsPanel: React.FC<ResultsPanelProps> = ({ project, refreshKey 
           isLoadingDocuments ? (
             <Loading message="Loading chat context..." />
           ) : (
-            <div className="h-[600px] overflow-hidden rounded-lg border border-slate-200 bg-slate-50">
+            <div className="h-[600px] overflow-hidden rounded-lg border border-border bg-surface">
               <ChatView
                 projectId={project.id}
                 hasDocuments={documents.length > 0}
@@ -180,5 +180,3 @@ export const ResultsPanel: React.FC<ResultsPanelProps> = ({ project, refreshKey 
     </div>
   );
 };
-
-// Made with Bob

@@ -25,10 +25,10 @@ const getErrorMessage = (err: unknown, fallback: string) => (
   err instanceof Error ? err.message : fallback
 );
 
-export default function ChatView({ 
-  projectId, 
-  hasDocuments = false, 
-  hasEmbeddings = false 
+export default function ChatView({
+  projectId,
+  hasDocuments = false,
+  hasEmbeddings = false
 }: ChatViewProps) {
   const [messages, setMessages] = useState<DisplayMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -38,7 +38,7 @@ export default function ChatView({
   // Convert API chat messages to display format
   const convertToDisplayMessages = useCallback((apiMessages: APIChatMessage[]): DisplayMessage[] => {
     const displayMessages: DisplayMessage[] = [];
-    
+
     apiMessages.forEach((msg) => {
       // Add user message
       displayMessages.push({
@@ -46,7 +46,7 @@ export default function ChatView({
         content: msg.user_message,
         timestamp: msg.created_at,
       });
-      
+
       // Add assistant response
       displayMessages.push({
         role: 'assistant',
@@ -54,7 +54,7 @@ export default function ChatView({
         timestamp: msg.created_at,
       });
     });
-    
+
     return displayMessages;
   }, []);
 
@@ -99,7 +99,7 @@ export default function ChatView({
 
     try {
       const response = await api.chat.sendMessage(projectId, message);
-      
+
       // Add assistant response
       const assistantMessage: DisplayMessage = {
         role: 'assistant',
@@ -110,7 +110,7 @@ export default function ChatView({
     } catch (err: unknown) {
       console.error('Failed to send message:', err);
       setError(getErrorMessage(err, 'Failed to send message'));
-      
+
       // Remove the optimistically added user message on error
       setMessages((prev) => prev.slice(0, -1));
     } finally {
@@ -156,8 +156,8 @@ export default function ChatView({
     return (
       <div className="flex flex-1 items-center justify-center">
         <div className="text-center">
-          <div className="mb-4 inline-block h-8 w-8 animate-spin rounded-full border-b-2 border-blue-600" />
-          <p className="text-sm text-slate-600">Loading chat history...</p>
+          <div className="mb-4 inline-block h-8 w-8 animate-spin rounded-full border-b-2 border-accent" />
+          <p className="text-sm text-ink-muted">Loading chat history...</p>
         </div>
       </div>
     );
@@ -168,13 +168,13 @@ export default function ChatView({
   }
 
   return (
-    <div className="flex h-full flex-col bg-white">
+    <div className="flex h-full flex-col bg-surface-raised">
       {/* Header with clear button */}
       {messages.length > 0 && (
-        <div className="flex items-center justify-between border-b border-slate-200 bg-slate-50 px-4 py-3">
+        <div className="flex items-center justify-between border-b border-border bg-surface px-4 py-3">
           <div className="flex items-center gap-2">
             <svg
-              className="h-5 w-5 text-slate-600"
+              className="h-5 w-5 text-ink-muted"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -187,7 +187,7 @@ export default function ChatView({
                 d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
               />
             </svg>
-            <span className="text-sm font-medium text-slate-700">
+            <span className="text-sm font-medium text-ink-muted">
               {messages.length / 2} {messages.length === 2 ? 'conversation' : 'conversations'}
             </span>
           </div>
@@ -195,7 +195,7 @@ export default function ChatView({
             onClick={handleClearHistory}
             variant="secondary"
             disabled={isLoading}
-            className="text-sm"
+            className="text-sm text-ink-muted hover:text-error"
           >
             Clear History
           </Button>
@@ -211,8 +211,8 @@ export default function ChatView({
 
       {/* Error banner */}
       {error && messages.length > 0 && (
-        <div className="border-t border-red-200 bg-red-50 px-4 py-2">
-          <p className="text-sm text-red-800">{error}</p>
+        <div className="border-t border-error/30 bg-error-soft px-4 py-2">
+          <p className="text-sm text-error">{error}</p>
         </div>
       )}
 
@@ -229,5 +229,3 @@ export default function ChatView({
     </div>
   );
 }
-
-// Made with Bob

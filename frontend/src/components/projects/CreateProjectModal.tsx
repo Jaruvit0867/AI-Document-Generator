@@ -75,13 +75,13 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
       <form onSubmit={handleSubmit}>
         <div className="space-y-4">
           {error && (
-            <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+            <div className="rounded-lg border border-error/30 bg-error-soft p-3 text-sm text-error">
               {error}
             </div>
           )}
 
           <div>
-            <label htmlFor="project-name" className="mb-1 block text-sm font-medium text-slate-700">
+            <label htmlFor="project-name" className="mb-1 block text-sm font-medium text-ink">
               Project Name *
             </label>
             <input
@@ -89,7 +89,7 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm shadow-inner shadow-slate-950/[0.02] focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+              className="w-full rounded-lg border border-border px-3 py-2 text-sm shadow-inner shadow-black/[0.02] focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/30"
               placeholder="Equipment Borrowing Portal"
               disabled={isLoading}
               autoFocus
@@ -97,14 +97,14 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
           </div>
 
           <div>
-            <label htmlFor="project-description" className="mb-1 block text-sm font-medium text-slate-700">
+            <label htmlFor="project-description" className="mb-1 block text-sm font-medium text-ink">
               Description (Optional)
             </label>
             <textarea
               id="project-description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full resize-none rounded-lg border border-slate-300 px-3 py-2 text-sm leading-6 shadow-inner shadow-slate-950/[0.02] focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+              className="w-full resize-none rounded-lg border border-border px-3 py-2 text-sm leading-6 shadow-inner shadow-black/[0.02] focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/30"
               placeholder="Short context for this requirement workspace..."
               rows={3}
               disabled={isLoading}
@@ -115,5 +115,3 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
     </Modal>
   );
 };
-
-// Made with Bob

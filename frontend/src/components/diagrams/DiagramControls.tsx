@@ -53,7 +53,7 @@ export const DiagramControls: React.FC<DiagramControlsProps> = ({
   };
 
   return (
-    <div className="flex flex-wrap items-center gap-2 rounded-b-lg border-t border-slate-200 bg-slate-50 p-3">
+    <div className="flex flex-wrap items-center gap-2 rounded-b-lg border-t border-border bg-surface p-3">
       <Button
         variant="outline"
         size="sm"
@@ -87,5 +87,3 @@ export const DiagramControls: React.FC<DiagramControlsProps> = ({
     </div>
   );
 };
-
-// Made with Bob

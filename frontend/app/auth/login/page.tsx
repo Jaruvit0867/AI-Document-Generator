@@ -71,11 +71,11 @@ export default function LoginPage() {
   return (
     <div>
       <div className="mb-6">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">
+        <h2 className="mb-2 text-2xl font-semibold tracking-tight text-slate-950">
           Welcome back
         </h2>
-        <p className="text-gray-600">
-          Sign in to your account to continue
+        <p className="text-sm leading-6 text-slate-600">
+          Continue turning requirements into delivery-ready plans.
         </p>
       </div>
 
@@ -97,7 +97,7 @@ export default function LoginPage() {
           required
           icon={
             <svg
-              className="w-5 h-5 text-gray-400"
+              className="h-5 w-5"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -123,7 +123,7 @@ export default function LoginPage() {
           required
           icon={
             <svg
-              className="w-5 h-5 text-gray-400"
+              className="h-5 w-5"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -144,9 +144,9 @@ export default function LoginPage() {
               type="checkbox"
               checked={rememberMe}
               onChange={(e) => setRememberMe(e.target.checked)}
-              className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
             />
-            <span className="ml-2 text-sm text-gray-700">Remember me</span>
+            <span className="ml-2 text-sm text-slate-700">Remember me</span>
           </label>
 
           <AuthLink href="/auth/forgot-password" className="text-sm">
@@ -160,7 +160,7 @@ export default function LoginPage() {
       </form>
 
       <div className="mt-6 text-center">
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-slate-600">
           Don&apos;t have an account?{' '}
           <AuthLink href="/auth/register">Create one now</AuthLink>
         </p>

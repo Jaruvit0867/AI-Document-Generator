@@ -19,7 +19,7 @@ export const RisksAndQuestions: React.FC<RisksAndQuestionsProps> = ({
       <div className="space-y-6">
         {risks.length > 0 && (
           <div>
-            <h4 className="text-sm font-semibold text-red-700 mb-3 flex items-center">
+            <h4 className="text-sm font-semibold text-error mb-3 flex items-center">
               <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                 <path
                   fillRule="evenodd"
@@ -31,9 +31,9 @@ export const RisksAndQuestions: React.FC<RisksAndQuestionsProps> = ({
             </h4>
             <ul className="space-y-2">
               {risks.map((risk: string, index: number) => (
-                <li key={index} className="flex items-start p-3 bg-red-50 rounded-lg border border-red-200">
-                  <span className="text-red-500 mr-2 mt-0.5">⚠</span>
-                  <span className="text-gray-900">{risk}</span>
+                <li key={index} className="flex items-start p-3 bg-error-soft rounded-lg border border-error/30">
+                  <span className="text-error mr-2 mt-0.5">⚠</span>
+                  <span className="text-ink">{risk}</span>
                 </li>
               ))}
             </ul>
@@ -42,7 +42,7 @@ export const RisksAndQuestions: React.FC<RisksAndQuestionsProps> = ({
 
         {openQuestions.length > 0 && (
           <div>
-            <h4 className="text-sm font-semibold text-blue-700 mb-3 flex items-center">
+            <h4 className="text-sm font-semibold text-accent mb-3 flex items-center">
               <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                 <path
                   fillRule="evenodd"
@@ -54,9 +54,9 @@ export const RisksAndQuestions: React.FC<RisksAndQuestionsProps> = ({
             </h4>
             <ul className="space-y-2">
               {openQuestions.map((question: string, index: number) => (
-                <li key={index} className="flex items-start p-3 bg-blue-50 rounded-lg border border-blue-200">
-                  <span className="text-blue-500 mr-2 mt-0.5">?</span>
-                  <span className="text-gray-900">{question}</span>
+                <li key={index} className="flex items-start p-3 bg-accent-soft rounded-lg border border-accent/30">
+                  <span className="text-accent mr-2 mt-0.5">?</span>
+                  <span className="text-ink">{question}</span>
                 </li>
               ))}
             </ul>
@@ -66,5 +66,3 @@ export const RisksAndQuestions: React.FC<RisksAndQuestionsProps> = ({
     </ProposalSection>
   );
 };
-
-// Made with Bob

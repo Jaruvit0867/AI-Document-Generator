@@ -57,7 +57,7 @@ export const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({
     try {
       // Convert text to file
       const file = convertTextToFile(text, 'requirements.txt');
-      
+
       // Upload file
       await api.documents.upload(currentProject.id, file);
       await loadDocuments();
@@ -115,15 +115,15 @@ export const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({
     <div className="flex h-full flex-col">
       <ProjectHeader project={currentProject} onDeleted={onProjectDeleted} />
 
-      <div className="flex-1 overflow-y-auto bg-slate-50">
+      <div className="flex-1 overflow-y-auto">
         <div className="mx-auto max-w-7xl p-4 sm:p-6">
           {error && (
-            <div className="mb-6 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+            <div className="mb-6 rounded-lg border border-error/30 bg-error-soft p-4 text-sm text-error">
               {error}
             </div>
           )}
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
             {/* Left Column: Input and Documents */}
             <div className="lg:col-span-2 space-y-6">
               <InputPanel
@@ -135,10 +135,10 @@ export const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({
               <div>
                 <div className="mb-3 flex items-center justify-between">
                   <div>
-                    <h3 className="text-base font-semibold text-slate-950">
+                    <h3 className="text-base font-semibold text-ink">
                       Source Documents
                     </h3>
-                    <p className="text-sm text-slate-500">
+                    <p className="text-sm text-ink-faint">
                       {documents.length} uploaded {documents.length === 1 ? 'file' : 'files'}
                     </p>
                   </div>
@@ -176,5 +176,3 @@ export const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({
     </div>
   );
 };
-
-// Made with Bob

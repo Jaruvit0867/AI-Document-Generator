@@ -25,7 +25,7 @@ export const ProposalDocument: React.FC<ProposalDocumentProps> = ({
 
       {/* Project Overview */}
       <section className="mb-8 page-break-inside-avoid">
-        <h2 className="text-2xl font-bold mb-4 text-slate-900 border-b-2 border-blue-600 pb-2">
+        <h2 className="text-2xl font-bold mb-4 text-slate-900 border-b-2 border-accent pb-2">
           Project Overview
         </h2>
         <div className="space-y-4">
@@ -54,7 +54,7 @@ export const ProposalDocument: React.FC<ProposalDocumentProps> = ({
 
       {/* Requirements */}
       <section className="mb-8 page-break-inside-avoid">
-        <h2 className="text-2xl font-bold mb-4 text-slate-900 border-b-2 border-blue-600 pb-2">
+        <h2 className="text-2xl font-bold mb-4 text-slate-900 border-b-2 border-accent pb-2">
           Requirements
         </h2>
         <div className="space-y-4">
@@ -79,7 +79,7 @@ export const ProposalDocument: React.FC<ProposalDocumentProps> = ({
 
       {/* Feature Breakdown */}
       <section className="mb-8 page-break-inside-avoid">
-        <h2 className="text-2xl font-bold mb-4 text-slate-900 border-b-2 border-blue-600 pb-2">
+        <h2 className="text-2xl font-bold mb-4 text-slate-900 border-b-2 border-accent pb-2">
           Feature Breakdown
         </h2>
         <ul className="list-disc list-inside text-slate-700 space-y-1">
@@ -91,7 +91,7 @@ export const ProposalDocument: React.FC<ProposalDocumentProps> = ({
 
       {/* User Flow */}
       <section className="mb-8 page-break-inside-avoid">
-        <h2 className="text-2xl font-bold mb-4 text-slate-900 border-b-2 border-blue-600 pb-2">
+        <h2 className="text-2xl font-bold mb-4 text-slate-900 border-b-2 border-accent pb-2">
           User Flow
         </h2>
         <ol className="list-decimal list-inside text-slate-700 space-y-1">
@@ -103,7 +103,7 @@ export const ProposalDocument: React.FC<ProposalDocumentProps> = ({
 
       {/* Business Process */}
       <section className="mb-8 page-break-inside-avoid">
-        <h2 className="text-2xl font-bold mb-4 text-slate-900 border-b-2 border-blue-600 pb-2">
+        <h2 className="text-2xl font-bold mb-4 text-slate-900 border-b-2 border-accent pb-2">
           Business Process
         </h2>
         <ol className="list-decimal list-inside text-slate-700 space-y-1">
@@ -115,7 +115,7 @@ export const ProposalDocument: React.FC<ProposalDocumentProps> = ({
 
       {/* Project Scope */}
       <section className="mb-8 page-break-inside-avoid">
-        <h2 className="text-2xl font-bold mb-4 text-slate-900 border-b-2 border-blue-600 pb-2">
+        <h2 className="text-2xl font-bold mb-4 text-slate-900 border-b-2 border-accent pb-2">
           Project Scope
         </h2>
         <div className="space-y-4">
@@ -140,7 +140,7 @@ export const ProposalDocument: React.FC<ProposalDocumentProps> = ({
 
       {/* Technical Architecture */}
       <section className="mb-8 page-break-inside-avoid">
-        <h2 className="text-2xl font-bold mb-4 text-slate-900 border-b-2 border-blue-600 pb-2">
+        <h2 className="text-2xl font-bold mb-4 text-slate-900 border-b-2 border-accent pb-2">
           Technical Architecture
         </h2>
         <div className="space-y-3">
@@ -175,7 +175,7 @@ export const ProposalDocument: React.FC<ProposalDocumentProps> = ({
 
       {/* Timeline & Milestones */}
       <section className="mb-8 page-break-inside-avoid">
-        <h2 className="text-2xl font-bold mb-4 text-slate-900 border-b-2 border-blue-600 pb-2">
+        <h2 className="text-2xl font-bold mb-4 text-slate-900 border-b-2 border-accent pb-2">
           Timeline & Milestones
         </h2>
         <ol className="list-decimal list-inside text-slate-700 space-y-1">
@@ -188,7 +188,7 @@ export const ProposalDocument: React.FC<ProposalDocumentProps> = ({
       {/* Diagrams Section */}
       {diagrams.length > 0 && (
         <section className="mb-8">
-          <h2 className="text-2xl font-bold mb-4 text-slate-900 border-b-2 border-blue-600 pb-2">
+          <h2 className="text-2xl font-bold mb-4 text-slate-900 border-b-2 border-accent pb-2">
             Project Diagrams
           </h2>
           <div className="space-y-6">
@@ -213,5 +213,3 @@ export const ProposalDocument: React.FC<ProposalDocumentProps> = ({
     </div>
   );
 };
-
-// Made with Bob

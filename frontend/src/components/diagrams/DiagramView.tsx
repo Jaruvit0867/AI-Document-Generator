@@ -57,7 +57,7 @@ export const DiagramView: React.FC<DiagramViewProps> = ({ diagrams }) => {
 
   return (
     <div className="space-y-4">
-      <div className="overflow-hidden rounded-lg border border-slate-200 bg-white">
+      <div className="overflow-hidden rounded-xl border border-border bg-surface-raised shadow-sm shadow-black/[0.03]">
         <DiagramTabs
           activeType={activeType}
           onTypeChange={setActiveType}
@@ -65,7 +65,7 @@ export const DiagramView: React.FC<DiagramViewProps> = ({ diagrams }) => {
         />
 
         <div className="p-4 sm:p-6">
-          <h3 className="mb-4 text-base font-semibold text-slate-950">
+          <h3 className="mb-4 text-base font-semibold text-ink">
             {activeDiagram.title}
           </h3>
           <MermaidDiagram
@@ -81,12 +81,12 @@ export const DiagramView: React.FC<DiagramViewProps> = ({ diagrams }) => {
       </div>
 
       {/* Diagram Source Code (Collapsible) */}
-      <details className="rounded-lg border border-slate-200 bg-slate-50">
-        <summary className="cursor-pointer px-4 py-3 font-medium text-slate-700 transition-colors hover:bg-slate-100">
-          View Mermaid Source Code
+      <details className="rounded-xl border border-border bg-surface">
+        <summary className="cursor-pointer px-4 py-3 font-medium text-ink-muted transition-colors hover:bg-surface-raised">
+          Mermaid source
         </summary>
-        <div className="border-t border-slate-200 px-4 py-3">
-          <pre className="overflow-x-auto rounded-lg bg-slate-950 p-4 text-sm text-slate-100">
+        <div className="border-t border-border px-4 py-3">
+          <pre className="overflow-x-auto rounded-lg bg-ink p-4 text-sm text-ink-faint">
             <code>{activeDiagram.mermaid_content}</code>
           </pre>
         </div>
@@ -94,5 +94,3 @@ export const DiagramView: React.FC<DiagramViewProps> = ({ diagrams }) => {
     </div>
   );
 };
-
-// Made with Bob

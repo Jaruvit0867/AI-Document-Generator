@@ -46,14 +46,14 @@ export default function ChatHistory({ messages, isLoading = false }: ChatHistory
       {isLoading && (
         <div className="mb-4 flex justify-start">
           <div className="flex max-w-[80%] items-start gap-3">
-            <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-slate-700 text-sm font-semibold text-white">
+            <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-ink text-sm font-semibold text-white">
               A
             </div>
-            <div className="rounded-lg border border-slate-200 bg-white px-4 py-3 shadow-sm shadow-slate-950/[0.03]">
+            <div className="rounded-lg border border-border bg-surface-raised px-4 py-3 shadow-sm shadow-black/[0.03]">
               <div className="flex items-center gap-1">
-                <div className="h-2 w-2 animate-bounce rounded-full bg-slate-400" style={{ animationDelay: '0ms' }} />
-                <div className="h-2 w-2 animate-bounce rounded-full bg-slate-400" style={{ animationDelay: '150ms' }} />
-                <div className="h-2 w-2 animate-bounce rounded-full bg-slate-400" style={{ animationDelay: '300ms' }} />
+                <div className="h-2 w-2 animate-bounce rounded-full bg-ink-faint" style={{ animationDelay: '0ms' }} />
+                <div className="h-2 w-2 animate-bounce rounded-full bg-ink-faint" style={{ animationDelay: '150ms' }} />
+                <div className="h-2 w-2 animate-bounce rounded-full bg-ink-faint" style={{ animationDelay: '300ms' }} />
               </div>
             </div>
           </div>
@@ -65,5 +65,3 @@ export default function ChatHistory({ messages, isLoading = false }: ChatHistory
     </div>
   );
 }
-
-// Made with Bob

@@ -13,8 +13,8 @@ export const Card: React.FC<CardProps> = ({
   onClick,
   hover = false,
 }) => {
-  const baseStyles = 'rounded-lg border border-slate-200 bg-white shadow-sm shadow-slate-950/[0.03]';
-  const hoverStyles = hover ? 'hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md hover:shadow-slate-950/[0.06] transition-all cursor-pointer' : '';
+  const baseStyles = 'rounded-xl border border-border bg-surface-raised shadow-sm shadow-black/[0.03]';
+  const hoverStyles = hover ? 'hover:-translate-y-1 hover:border-accent/30 hover:shadow-lg hover:shadow-[0_8px_30px_-12px_rgba(124,58,237,0.12)] transition-all duration-200 cursor-pointer' : '';
   const clickableStyles = onClick ? 'cursor-pointer' : '';
 
   return (
@@ -34,7 +34,7 @@ interface CardHeaderProps {
 
 export const CardHeader: React.FC<CardHeaderProps> = ({ children, className = '' }) => {
   return (
-    <div className={`border-b border-slate-200 px-6 py-4 ${className}`}>
+    <div className={`border-b border-border px-6 py-4 ${className}`}>
       {children}
     </div>
   );
@@ -60,10 +60,8 @@ interface CardFooterProps {
 
 export const CardFooter: React.FC<CardFooterProps> = ({ children, className = '' }) => {
   return (
-    <div className={`rounded-b-lg border-t border-slate-200 bg-slate-50 px-6 py-4 ${className}`}>
+    <div className={`rounded-b-lg border-t border-border bg-surface px-6 py-4 ${className}`}>
       {children}
     </div>
   );
 };
-
-// Made with Bob

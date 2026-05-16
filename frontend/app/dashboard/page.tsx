@@ -37,7 +37,6 @@ export default function DashboardPage() {
   };
 
   const handleProjectUpdated = async () => {
-    // Fetch the latest project data to show updated extraction results
     if (selectedProject) {
       try {
         const updatedProject = await api.projects.get(selectedProject.id);
@@ -49,16 +48,16 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-slate-50 text-slate-950">
+    <div className="flex min-h-screen flex-col bg-surface text-ink">
       {/* Header */}
-      <header className="flex-shrink-0 border-b border-slate-200 bg-white/95 shadow-sm shadow-slate-950/[0.03] backdrop-blur">
+      <header className="flex-shrink-0 border-b border-border bg-surface-raised/90 shadow-sm shadow-black/[0.03] backdrop-blur-xl">
         <div className="px-4 py-3 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               {/* Mobile menu button */}
               <button
                 onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                className="mr-3 rounded-lg p-2 text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-950 lg:hidden"
+                className="mr-3 rounded-lg p-2 text-ink-muted transition-colors hover:bg-border/30 hover:text-ink lg:hidden"
                 aria-label="Toggle project navigation"
               >
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -66,7 +65,7 @@ export default function DashboardPage() {
                 </svg>
               </button>
 
-              <div className="mr-3 flex h-10 w-10 items-center justify-center rounded-lg bg-slate-950">
+              <div className="mr-3 flex h-10 w-10 items-center justify-center rounded-xl bg-ink shadow-lg shadow-ink/10">
                 <svg
                   className="w-6 h-6 text-white"
                   fill="none"
@@ -82,11 +81,11 @@ export default function DashboardPage() {
                 </svg>
               </div>
               <div>
-                <h1 className="text-base font-semibold leading-5 text-slate-950 sm:text-lg">
+                <h1 className="text-base font-semibold leading-5 text-ink sm:text-lg">
                   Plan Generator
                 </h1>
-                <p className="hidden text-xs text-slate-500 sm:block">
-                  Requirements to proposal, diagrams, and delivery plan
+                <p className="hidden text-xs text-ink-faint sm:block">
+                  Requirements to developer-ready plans
                 </p>
               </div>
             </div>
@@ -108,7 +107,7 @@ export default function DashboardPage() {
           className={`
             ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
             fixed lg:static inset-y-0 left-0 z-40
-            w-80 bg-white border-r border-slate-200
+            w-80 border-r border-border bg-surface-raised/95 backdrop-blur-xl
             transition-transform duration-300 ease-in-out
             lg:translate-x-0
             flex flex-col
@@ -125,13 +124,13 @@ export default function DashboardPage() {
         {/* Overlay for mobile */}
         {isSidebarOpen && (
           <div
-            className="fixed inset-0 z-30 bg-slate-950/45 backdrop-blur-sm lg:hidden"
+            className="fixed inset-0 z-30 bg-ink/50 backdrop-blur-sm lg:hidden"
             onClick={() => setIsSidebarOpen(false)}
           />
         )}
 
         {/* Main Area */}
-        <main className="flex-1 overflow-hidden bg-slate-50">
+        <main className="flex-1 overflow-hidden">
           {selectedProject ? (
             <WorkspaceLayout
               project={selectedProject}
@@ -144,7 +143,7 @@ export default function DashboardPage() {
                 <EmptyState
                   icon={<FolderIcon />}
                   title="No project selected"
-                  description="Choose a project from the navigator, or create a new one to start turning requirements into a development plan."
+                  description="Choose a workspace or create one to generate your first plan."
                 />
               </div>
             </div>
@@ -154,5 +153,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-
-// Made with Bob

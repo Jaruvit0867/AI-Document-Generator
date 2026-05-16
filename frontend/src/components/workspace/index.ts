@@ -7,5 +7,3 @@ export { ProcessingPipeline } from './ProcessingPipeline';
 export { PipelineStatus } from './PipelineStatus';
 export { ResultsPanel } from './ResultsPanel';
 export type { PipelineStep, StepStatus } from './PipelineStatus';
-
-// Made with Bob

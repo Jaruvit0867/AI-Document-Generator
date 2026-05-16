@@ -86,10 +86,10 @@ export const ProposalView: React.FC<ProposalViewProps> = ({
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-4 border-b border-slate-200 pb-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-4 border-b border-border pb-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-xl font-semibold tracking-tight text-slate-950">Project Proposal</h2>
-          <p className="mt-1 text-sm text-slate-500">{projectName}</p>
+          <h2 className="text-xl font-semibold tracking-tight text-ink">Project Proposal</h2>
+          <p className="mt-1 text-sm text-ink-faint">{projectName}</p>
         </div>
         <div className="flex flex-wrap gap-2">
           <Button variant="outline" size="sm" onClick={handleCopyToClipboard}>
@@ -143,24 +143,24 @@ export const ProposalView: React.FC<ProposalViewProps> = ({
       <div
         id={exportDocumentId}
         aria-hidden="true"
-        className="pointer-events-none fixed left-[-10000px] top-0 -z-10 w-[900px] bg-white"
+        className="pointer-events-none fixed left-[-10000px] top-0 -z-10 w-[900px] bg-surface-raised"
       >
         <ProposalDocument proposal={proposal} projectName={projectName} diagrams={diagrams} />
       </div>
 
       {isExporting && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
-          <div className="w-full max-w-sm rounded-lg bg-white p-6 shadow-xl shadow-slate-950/20">
-            <h3 className="text-base font-semibold text-slate-950">
+          <div className="w-full max-w-sm rounded-lg bg-surface-raised p-6 shadow-sm shadow-black/[0.03]">
+            <h3 className="text-base font-semibold text-ink">
               Exporting {exportType === 'pdf' ? 'PDF' : 'Word Document'}...
             </h3>
-            <div className="mt-4 h-2.5 w-full overflow-hidden rounded-full bg-slate-200">
+            <div className="mt-4 h-2.5 w-full overflow-hidden rounded-full bg-border">
               <div
-                className="h-full rounded-full bg-blue-600 transition-all"
+                className="h-full rounded-full bg-accent transition-all"
                 style={{ width: exportType === 'pdf' ? `${Math.max(exportProgress, 12)}%` : '50%' }}
               />
             </div>
-            <p className="mt-4 text-center text-sm text-slate-600">Please wait...</p>
+            <p className="mt-4 text-center text-sm text-ink-muted">Please wait...</p>
           </div>
         </div>
       )}
@@ -204,5 +204,3 @@ function generateMarkdown(proposal: ExtractionResult, projectName: string): stri
 
   return md;
 }
-
-// Made with Bob

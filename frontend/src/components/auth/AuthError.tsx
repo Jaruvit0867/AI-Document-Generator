@@ -9,13 +9,13 @@ export const AuthError: React.FC<AuthErrorProps> = ({ message }) => {
 
   return (
     <div
-      className="p-4 rounded-lg bg-red-50 border border-red-200"
+      className="p-4 rounded-xl bg-error-soft border border-error/30"
       role="alert"
       aria-live="polite"
     >
       <div className="flex items-start">
         <svg
-          className="w-5 h-5 text-red-600 mt-0.5 mr-3 flex-shrink-0"
+          className="w-5 h-5 text-error mt-0.5 mr-3 flex-shrink-0"
           fill="currentColor"
           viewBox="0 0 20 20"
         >
@@ -25,10 +25,8 @@ export const AuthError: React.FC<AuthErrorProps> = ({ message }) => {
             clipRule="evenodd"
           />
         </svg>
-        <p className="text-sm text-red-800">{message}</p>
+        <p className="text-sm text-error">{message}</p>
       </div>
     </div>
   );
 };
-
-// Made with Bob

@@ -15,34 +15,32 @@ export const AuthInput: React.FC<AuthInputProps> = ({
 }) => {
   return (
     <div className="w-full">
-      <label className="block text-sm font-medium text-gray-700 mb-1">
+      <label className="mb-1.5 block text-sm font-medium text-ink">
         {label}
       </label>
       <div className="relative">
         {icon && (
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-ink-faint">
             {icon}
           </div>
         )}
         <input
           className={`
-            w-full px-4 py-2.5 border rounded-lg
-            focus:ring-2 focus:ring-blue-500 focus:border-transparent
-            transition-all duration-200
-            ${icon ? 'pl-10' : ''}
-            ${error ? 'border-red-500' : 'border-gray-300'}
+            h-11 w-full rounded-xl border bg-surface-raised px-4 text-sm text-ink
+            transition-all duration-200 placeholder:text-ink-faint
+            focus:border-accent focus:outline-none focus:ring-4 focus:ring-accent/10
+            ${icon ? 'pl-11' : ''}
+            ${error ? 'border-error ring-4 ring-error/10' : 'border-border'}
             ${className}
           `}
           {...props}
         />
       </div>
       {error && (
-        <p className="mt-1 text-sm text-red-600" role="alert">
+        <p className="mt-1.5 text-sm text-error" role="alert">
           {error}
         </p>
       )}
     </div>
   );
 };
-
-// Made with Bob

@@ -12,7 +12,7 @@ export const FeatureBreakdown: React.FC<FeatureBreakdownProps> = ({ features }) 
         {features.map((feature: string, index: number) => (
           <li key={index} className="flex items-start">
             <svg
-              className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0"
+              className="w-5 h-5 text-success mr-3 mt-0.5 flex-shrink-0"
               fill="currentColor"
               viewBox="0 0 20 20"
             >
@@ -22,12 +22,10 @@ export const FeatureBreakdown: React.FC<FeatureBreakdownProps> = ({ features }) 
                 clipRule="evenodd"
               />
             </svg>
-            <span className="text-gray-900">{feature}</span>
+            <span className="text-ink">{feature}</span>
           </li>
         ))}
       </ul>
     </ProposalSection>
   );
 };
-
-// Made with Bob

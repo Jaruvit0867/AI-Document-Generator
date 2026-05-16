@@ -118,11 +118,11 @@ export default function RegisterPage() {
   return (
     <div>
       <div className="mb-6">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">
+        <h2 className="mb-2 text-2xl font-semibold tracking-tight text-slate-950">
           Create your account
         </h2>
-        <p className="text-gray-600">
-          Get started with Doc Generator today
+        <p className="text-sm leading-6 text-slate-600">
+          Start your first AI-generated development plan.
         </p>
       </div>
 
@@ -144,7 +144,7 @@ export default function RegisterPage() {
           required
           icon={
             <svg
-              className="w-5 h-5 text-gray-400"
+              className="h-5 w-5"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -171,7 +171,7 @@ export default function RegisterPage() {
             required
             icon={
               <svg
-                className="w-5 h-5 text-gray-400"
+                className="h-5 w-5"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -190,22 +190,19 @@ export default function RegisterPage() {
           {password && (
             <div className="mt-2">
               <div className="flex items-center justify-between mb-1">
-                <span className="text-xs text-gray-600">
-                  Password strength:
+                <span className="text-xs text-slate-500">
+                  Strength
                 </span>
-                <span className="text-xs font-medium text-gray-700">
+                <span className="text-xs font-semibold text-slate-700">
                   {passwordStrength.label}
                 </span>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-1.5">
+              <div className="h-1.5 w-full rounded-full bg-slate-200">
                 <div
                   className={`h-1.5 rounded-full transition-all duration-300 ${passwordStrength.color}`}
                   style={{ width: `${(passwordStrength.strength / 5) * 100}%` }}
                 ></div>
               </div>
-              <p className="mt-1 text-xs text-gray-500">
-                Use 8+ characters with a mix of letters, numbers & symbols
-              </p>
             </div>
           )}
         </div>
@@ -221,7 +218,7 @@ export default function RegisterPage() {
           required
           icon={
             <svg
-              className="w-5 h-5 text-gray-400"
+              className="h-5 w-5"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -242,16 +239,15 @@ export default function RegisterPage() {
       </form>
 
       <div className="mt-6 text-center">
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-slate-600">
           Already have an account?{' '}
           <AuthLink href="/auth/login">Sign in instead</AuthLink>
         </p>
       </div>
 
-      <div className="mt-6 pt-6 border-t border-gray-200">
-        <p className="text-xs text-gray-500 text-center">
-          By creating an account, you agree to our Terms of Service and Privacy
-          Policy
+      <div className="mt-6 border-t border-slate-200 pt-6">
+        <p className="text-center text-xs leading-5 text-slate-500">
+          Built for fast planning workflows. Keep sensitive project data internal.
         </p>
       </div>
     </div>

@@ -14,22 +14,22 @@ export const AuthButton: React.FC<AuthButtonProps> = ({
   ...props
 }) => {
   const baseStyles = `
-    w-full px-4 py-2.5 rounded-lg font-medium
-    transition-all duration-200
+    w-full h-11 px-4 rounded-xl text-sm font-semibold
+    transition-all duration-200 shadow-sm
     focus:outline-none focus:ring-2 focus:ring-offset-2
     disabled:opacity-50 disabled:cursor-not-allowed
   `;
 
   const variantStyles = {
     primary: `
-      bg-blue-600 text-white
-      hover:bg-blue-700
-      focus:ring-blue-500
+      bg-accent text-white shadow-accent/25
+      hover:-translate-y-0.5 hover:bg-accent-hover hover:shadow-[0_0_20px_-5px_rgba(124,58,237,0.4)]
+      focus:ring-accent/30 active:translate-y-0
     `,
     secondary: `
-      bg-gray-200 text-gray-800
-      hover:bg-gray-300
-      focus:ring-gray-500
+      bg-border/50 text-ink
+      hover:bg-border
+      focus:ring-border-strong
     `,
   };
 
@@ -69,5 +69,3 @@ export const AuthButton: React.FC<AuthButtonProps> = ({
     </button>
   );
 };
-
-// Made with Bob

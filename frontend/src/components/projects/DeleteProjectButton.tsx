@@ -40,7 +40,7 @@ export const DeleteProjectButton: React.FC<DeleteProjectButtonProps> = ({
         variant="outline"
         size="sm"
         onClick={() => setIsModalOpen(true)}
-        className={`border-red-200 text-red-700 hover:border-red-300 hover:bg-red-50 hover:text-red-800 ${className}`}
+        className={`border-error/30 text-error hover:border-error/50 hover:bg-error-soft hover:text-error ${className}`}
       >
         <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -73,14 +73,14 @@ export const DeleteProjectButton: React.FC<DeleteProjectButtonProps> = ({
       >
         <div className="space-y-4">
           {error && (
-            <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+            <div className="rounded-lg border border-error/30 bg-error-soft p-3 text-sm text-error">
               {error}
             </div>
           )}
-          <p className="text-sm leading-6 text-slate-700">
+          <p className="text-sm leading-6 text-ink-muted">
             Are you sure you want to delete <strong>{projectName}</strong>?
           </p>
-          <p className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm leading-6 text-red-700">
+          <p className="rounded-lg border border-error/30 bg-error-soft p-3 text-sm leading-6 text-error">
             This will permanently delete the project and all associated documents, diagrams, and chat history. This action cannot be undone.
           </p>
         </div>
@@ -88,5 +88,3 @@ export const DeleteProjectButton: React.FC<DeleteProjectButtonProps> = ({
     </>
   );
 };
-
-// Made with Bob

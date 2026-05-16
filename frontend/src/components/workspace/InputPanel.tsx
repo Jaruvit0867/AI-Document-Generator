@@ -20,25 +20,25 @@ export const InputPanel: React.FC<InputPanelProps> = ({
 
   return (
     <Card className="overflow-hidden">
-      <div className="border-b border-slate-200 px-5 py-4 sm:px-6">
+      <div className="border-b border-border px-5 py-4 sm:px-6">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h3 className="text-base font-semibold text-slate-950">Add Requirements</h3>
-            <p className="mt-1 text-sm text-slate-500">
-              Paste a brief or upload source files for extraction.
+            <h3 className="text-base font-semibold text-ink">Source Requirements</h3>
+            <p className="mt-1 text-sm text-ink-faint">
+              Paste text or upload files.
             </p>
           </div>
-        
+
           {/* Mode Tabs */}
-          <div className="grid grid-cols-2 rounded-lg bg-slate-100 p-1">
+          <div className="grid grid-cols-2 rounded-lg bg-border/30 p-1">
             <button
               type="button"
               onClick={() => setMode('text')}
               className={`
                 inline-flex items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors
                 ${mode === 'text'
-                  ? 'bg-white text-blue-700 shadow-sm'
-                  : 'text-slate-600 hover:text-slate-950'
+                  ? 'bg-surface-raised text-accent shadow-sm'
+                  : 'text-ink-muted hover:text-ink'
                 }
               `}
             >
@@ -53,8 +53,8 @@ export const InputPanel: React.FC<InputPanelProps> = ({
               className={`
                 inline-flex items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors
                 ${mode === 'file'
-                  ? 'bg-white text-blue-700 shadow-sm'
-                  : 'text-slate-600 hover:text-slate-950'
+                  ? 'bg-surface-raised text-accent shadow-sm'
+                  : 'text-ink-muted hover:text-ink'
                 }
               `}
             >
@@ -78,5 +78,3 @@ export const InputPanel: React.FC<InputPanelProps> = ({
     </Card>
   );
 };
-
-// Made with Bob

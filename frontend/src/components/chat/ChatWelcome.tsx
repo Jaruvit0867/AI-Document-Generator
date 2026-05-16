@@ -15,9 +15,9 @@ export default function ChatWelcome() {
       <div className="max-w-2xl text-center">
         {/* Icon */}
         <div className="mb-6 flex justify-center">
-          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-50 ring-1 ring-inset ring-blue-100">
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-accent-soft ring-1 ring-inset ring-accent/20">
             <svg
-              className="w-8 h-8 text-blue-600"
+              className="w-8 h-8 text-accent"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -34,27 +34,27 @@ export default function ChatWelcome() {
         </div>
 
         {/* Title */}
-        <h2 className="mb-2 text-2xl font-semibold tracking-tight text-slate-950">
+        <h2 className="mb-2 text-2xl font-semibold tracking-tight text-ink">
           Chat with Your Documents
         </h2>
 
         {/* Description */}
-        <p className="mb-8 text-sm leading-6 text-slate-600">
+        <p className="mb-8 text-sm leading-6 text-ink-muted">
           Ask questions about your project documents and get instant answers powered by AI.
         </p>
 
         {/* Suggestions */}
         <div className="space-y-2">
-          <p className="mb-3 text-sm font-medium text-slate-700">
+          <p className="mb-3 text-sm font-medium text-ink-muted">
             Try asking:
           </p>
           <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
             {suggestions.map((suggestion, index) => (
               <div
                 key={index}
-                className="rounded-lg border border-slate-200 bg-slate-50 p-3 text-left text-sm text-slate-700 transition-colors hover:bg-slate-100"
+                className="rounded-lg border border-border bg-surface-raised p-3 text-left text-sm text-ink-muted transition-colors hover:bg-border/20"
               >
-                <span className="mr-2 text-blue-600">→</span>
+                <span className="mr-2 text-accent">→</span>
                 {suggestion}
               </div>
             ))}
@@ -62,8 +62,8 @@ export default function ChatWelcome() {
         </div>
 
         {/* Info */}
-        <div className="mt-8 rounded-lg border border-blue-200 bg-blue-50 p-4">
-          <p className="text-sm text-blue-800">
+        <div className="mt-8 rounded-lg border border-accent/30 bg-accent-soft p-4">
+          <p className="text-sm text-accent">
             <strong>Tip:</strong> The chat uses your uploaded documents to provide accurate, context-aware answers.
           </p>
         </div>
@@ -71,5 +71,3 @@ export default function ChatWelcome() {
     </div>
   );
 }
-
-// Made with Bob

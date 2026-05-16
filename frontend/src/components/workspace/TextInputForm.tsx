@@ -8,37 +8,37 @@ interface TextInputFormProps {
 
 const TEMPLATE = `PROJECT REQUIREMENT BRIEF
 
-Project name: 
+Project name:
 
-Problem statement: 
+Problem statement:
 
-Target users: 
+Target users:
 
-Business goals: 
+Business goals:
 
-Functional requirements: 
+Functional requirements:
 
-Non-functional requirements: 
+Non-functional requirements:
 
-User flow: 
+User flow:
 
-Business process: 
+Business process:
 
-Scope - in: 
+Scope - in:
 
-Scope - out: 
+Scope - out:
 
-Preferred architecture / tech constraints: 
+Preferred architecture / tech constraints:
 
-Integrations: 
+Integrations:
 
-Timeline or deadline: 
+Timeline or deadline:
 
-Known risks / constraints: 
+Known risks / constraints:
 
-Open questions: 
+Open questions:
 
-Raw notes: 
+Raw notes:
 `;
 
 export const TextInputForm: React.FC<TextInputFormProps> = ({
@@ -68,7 +68,7 @@ export const TextInputForm: React.FC<TextInputFormProps> = ({
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <label className="block text-sm font-medium text-slate-700">
+        <label className="block text-sm font-medium text-ink-muted">
           Paste Requirements Text
         </label>
         <div className="flex gap-2">
@@ -98,13 +98,13 @@ export const TextInputForm: React.FC<TextInputFormProps> = ({
       <textarea
         value={text}
         onChange={(e) => setText(e.target.value)}
-        className="h-96 w-full resize-none rounded-lg border border-slate-300 bg-white px-4 py-3 font-mono text-sm leading-6 text-slate-950 shadow-inner shadow-slate-950/[0.02] focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-        placeholder="Paste your project requirements here, or use the template..."
+        className="h-80 w-full resize-none rounded-xl border border-border bg-surface-raised px-4 py-3 font-mono text-sm leading-6 text-ink shadow-sm shadow-black/[0.03] focus:border-accent focus:outline-none focus:ring-4 focus:ring-accent/10"
+        placeholder="Paste project requirements here..."
         disabled={isLoading}
       />
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-sm text-slate-500">
+        <p className="text-sm text-ink-faint">
           {text.length} characters
         </p>
         <Button
@@ -118,5 +118,3 @@ export const TextInputForm: React.FC<TextInputFormProps> = ({
     </form>
   );
 };
-
-// Made with Bob

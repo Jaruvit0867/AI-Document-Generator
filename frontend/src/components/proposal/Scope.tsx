@@ -11,7 +11,7 @@ export const Scope: React.FC<ScopeProps> = ({ data }) => {
     <ProposalSection title="Project Scope">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <h4 className="text-sm font-semibold text-green-700 mb-3 flex items-center">
+          <h4 className="text-sm font-semibold text-success mb-3 flex items-center">
             <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
               <path
                 fillRule="evenodd"
@@ -24,15 +24,15 @@ export const Scope: React.FC<ScopeProps> = ({ data }) => {
           <ul className="space-y-2">
             {data.in_scope.map((item: string, index: number) => (
               <li key={index} className="flex items-start">
-                <span className="text-green-500 mr-2">✓</span>
-                <span className="text-gray-900">{item}</span>
+                <span className="text-success mr-2">✓</span>
+                <span className="text-ink">{item}</span>
               </li>
             ))}
           </ul>
         </div>
 
         <div>
-          <h4 className="text-sm font-semibold text-red-700 mb-3 flex items-center">
+          <h4 className="text-sm font-semibold text-error mb-3 flex items-center">
             <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
               <path
                 fillRule="evenodd"
@@ -45,8 +45,8 @@ export const Scope: React.FC<ScopeProps> = ({ data }) => {
           <ul className="space-y-2">
             {data.out_of_scope.map((item: string, index: number) => (
               <li key={index} className="flex items-start">
-                <span className="text-red-500 mr-2">✗</span>
-                <span className="text-gray-900">{item}</span>
+                <span className="text-error mr-2">✗</span>
+                <span className="text-ink">{item}</span>
               </li>
             ))}
           </ul>
@@ -55,5 +55,3 @@ export const Scope: React.FC<ScopeProps> = ({ data }) => {
     </ProposalSection>
   );
 };
-
-// Made with Bob

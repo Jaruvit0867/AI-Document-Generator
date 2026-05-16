@@ -17,11 +17,18 @@ export const Modal: React.FC<ModalProps> = ({
   footer,
 }) => {
   const [isMounted, setIsMounted] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const titleId = useId();
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (isOpen) {
+      setIsVisible(true);
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -47,28 +54,28 @@ export const Modal: React.FC<ModalProps> = ({
     <div className="fixed inset-0 z-50 overflow-y-auto">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-slate-950/45 backdrop-blur-sm transition-opacity"
+        className={`fixed inset-0 bg-base/50 backdrop-blur-sm transition-opacity duration-200 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
         onClick={onClose}
       />
 
       {/* Modal */}
       <div className="flex min-h-full items-center justify-center p-4 sm:p-6">
         <div
-          className="relative max-h-[calc(100vh-3rem)] w-full max-w-lg overflow-hidden rounded-lg border border-slate-200 bg-white shadow-2xl shadow-slate-950/20"
+          className={`relative max-h-[calc(100vh-3rem)] w-full max-w-lg overflow-hidden rounded-xl border border-border bg-surface-raised shadow-2xl shadow-base/20 transition-all duration-200 ${isVisible ? 'scale-100 opacity-100' : 'scale-[0.97] opacity-0'}`}
           onClick={(e) => e.stopPropagation()}
           role="dialog"
           aria-modal="true"
           aria-labelledby={titleId}
         >
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4">
-            <h2 id={titleId} className="text-lg font-semibold text-slate-950">{title}</h2>
+          <div className="flex items-center justify-between border-b border-border px-6 py-4">
+            <h2 id={titleId} className="text-lg font-semibold text-ink">{title}</h2>
             <button
               onClick={onClose}
-              className="rounded-md p-1 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              className="rounded-lg p-1.5 text-ink-faint transition-colors hover:bg-border/40 hover:text-ink focus:outline-none focus:ring-2 focus:ring-accent/30 focus:ring-offset-2"
               aria-label="Close modal"
             >
-              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
@@ -79,7 +86,7 @@ export const Modal: React.FC<ModalProps> = ({
 
           {/* Footer */}
           {footer && (
-            <div className="flex items-center justify-end gap-3 border-t border-slate-200 bg-slate-50 px-6 py-4">
+            <div className="flex items-center justify-end gap-3 border-t border-border bg-surface px-6 py-4">
               {footer}
             </div>
           )}
@@ -89,5 +96,3 @@ export const Modal: React.FC<ModalProps> = ({
     document.body
   );
 };
-
-// Made with Bob

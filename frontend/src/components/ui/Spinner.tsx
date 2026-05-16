@@ -46,10 +46,8 @@ interface LoadingProps {
 export const Loading: React.FC<LoadingProps> = ({ message = 'Loading...', size = 'md' }) => {
   return (
     <div className="flex flex-col items-center justify-center p-8">
-      <Spinner size={size} className="text-blue-600" />
-      {message && <p className="mt-4 text-gray-600">{message}</p>}
+      <Spinner size={size} className="text-accent" />
+      {message && <p className="mt-4 text-ink-muted">{message}</p>}
     </div>
   );
 };
-
-// Made with Bob

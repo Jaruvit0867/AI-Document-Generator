@@ -29,24 +29,24 @@ export const DocumentList: React.FC<DocumentListProps> = ({
 
   const getFileIcon = (filename: string) => {
     const ext = filename.split('.').pop()?.toLowerCase();
-    
+
     switch (ext) {
       case 'pdf':
         return (
-          <svg className="w-8 h-8 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+          <svg className="w-8 h-8 text-error" fill="currentColor" viewBox="0 0 20 20">
             <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clipRule="evenodd" />
           </svg>
         );
       case 'docx':
       case 'doc':
         return (
-          <svg className="w-8 h-8 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+          <svg className="w-8 h-8 text-accent" fill="currentColor" viewBox="0 0 20 20">
             <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clipRule="evenodd" />
           </svg>
         );
       default:
         return (
-          <svg className="w-8 h-8 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+          <svg className="w-8 h-8 text-ink-muted" fill="currentColor" viewBox="0 0 20 20">
             <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clipRule="evenodd" />
           </svg>
         );
@@ -68,21 +68,21 @@ export const DocumentList: React.FC<DocumentListProps> = ({
       {documents.map((doc) => (
         <Card key={doc.id} className="p-4">
           <div className="flex items-start gap-4">
-            <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg bg-slate-100">
+            <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg bg-border/30">
               {getFileIcon(doc.filename)}
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-start justify-between gap-2">
                 <div className="flex-1 min-w-0">
-                  <h4 className="truncate text-sm font-medium text-slate-950">
+                  <h4 className="truncate text-sm font-medium text-ink">
                     {doc.filename}
                   </h4>
                   <div className="flex items-center gap-2 mt-1">
-                    <span className="text-xs text-slate-500">
+                    <span className="text-xs text-ink-faint">
                       {formatFileSize(doc.file_size)}
                     </span>
-                    <span className="text-xs text-slate-300">/</span>
-                    <span className="text-xs text-slate-500">
+                    <span className="text-xs text-border">/</span>
+                    <span className="text-xs text-ink-faint">
                       {formatDate(doc.uploaded_at || doc.created_at)}
                     </span>
                   </div>
@@ -90,7 +90,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                 {onDelete && (
                   <button
                     onClick={() => onDelete(doc.id)}
-                    className="flex-shrink-0 rounded-md p-1.5 text-slate-500 transition-colors hover:bg-red-50 hover:text-red-600"
+                    className="flex-shrink-0 rounded-md p-1.5 text-ink-muted transition-colors hover:bg-error-soft hover:text-error"
                     aria-label={`Delete ${doc.filename}`}
                     title="Delete document"
                   >
@@ -101,7 +101,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
                 )}
               </div>
               {doc.content_preview && (
-                <p className="mt-2 line-clamp-2 text-xs leading-5 text-slate-600">
+                <p className="mt-2 line-clamp-2 text-xs leading-5 text-ink-muted">
                   {doc.content_preview}
                 </p>
               )}
@@ -112,5 +112,3 @@ export const DocumentList: React.FC<DocumentListProps> = ({
     </div>
   );
 };
-
-// Made with Bob

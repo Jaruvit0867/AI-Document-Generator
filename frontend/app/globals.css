@@ -1,21 +1,54 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --surface: #FAFBFF;
+  --surface-raised: #FFFFFF;
+  --base: #09090B;
+  --ink: #0F172A;
+  --ink-muted: #64748B;
+  --ink-faint: #94A3B8;
+  --accent: #7C3AED;
+  --accent-hover: #6D28D9;
+  --accent-soft: #F5F3FF;
+  --border: #E2E8F0;
+  --border-strong: #CBD5E1;
+  --success: #059669;
+  --success-soft: #ECFDF5;
+  --warning: #D97706;
+  --warning-soft: #FFFBEB;
+  --error: #DC2626;
+  --error-soft: #FEF2F2;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-background: var(--surface);
+  --color-foreground: var(--ink);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-base: var(--base);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-faint: var(--ink-faint);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-soft: var(--accent-soft);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-error: var(--error);
+  --color-error-soft: var(--error-soft);
+  --font-sans: var(--font-outfit);
+  --font-mono: var(--font-jetbrains-mono);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--font-outfit), system-ui, sans-serif;
+  overflow-x: hidden;
 }
 
 * {
@@ -23,13 +56,13 @@ body {
 }
 
 ::selection {
-  background: rgb(191 219 254);
-  color: rgb(15 23 42);
+  background: rgba(124, 58, 237, 0.2);
+  color: var(--ink);
 }
 
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
@@ -37,93 +70,55 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgb(203 213 225);
+  background: var(--border-strong);
   border: 2px solid transparent;
   border-radius: 999px;
   background-clip: content-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgb(148 163 184);
+  background: var(--ink-faint);
   border: 2px solid transparent;
-  background-clip: content-box;
+  border-clip: content-box;
 }
 
-/* Improve text contrast for better readability - Much darker colors */
-.text-gray-500 {
-  color: rgb(31 41 55) !important; /* Much darker - almost gray-800 */
+/* Custom keyframes */
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(124, 58, 237, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(124, 58, 237, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(124, 58, 237, 0); }
 }
 
-.text-gray-600 {
-  color: rgb(17 24 39) !important; /* Much darker - almost gray-900 */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-.text-gray-400 {
-  color: rgb(75 85 99) !important; /* Much darker - like gray-600 */
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.text-gray-700 {
-  color: rgb(17 24 39) !important; /* Ensure gray-700 is very dark */
+.animate-pulse-ring {
+  animation: pulse-ring 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-.text-gray-800 {
-  color: rgb(17 24 39) !important; /* Very dark */
+.animate-fade-in {
+  animation: fade-in 0.4s ease-out;
 }
 
-.text-gray-900 {
-  color: rgb(17 24 39) !important; /* Very dark */
-}
-
-/* Fix input and textarea text colors - make them very dark */
-input,
-textarea,
-select {
-  color: rgb(17 24 39) !important; /* Very dark text in inputs */
-}
-
-/* Fix placeholder colors - make them darker but still distinguishable */
-input::placeholder,
-textarea::placeholder {
-  color: rgb(107 114 128) !important; /* Darker placeholder - gray-500 */
-  opacity: 1 !important;
-}
-
-input::-webkit-input-placeholder,
-textarea::-webkit-input-placeholder {
-  color: rgb(107 114 128) !important;
-  opacity: 1 !important;
-}
-
-input::-moz-placeholder,
-textarea::-moz-placeholder {
-  color: rgb(107 114 128) !important;
-  opacity: 1 !important;
-}
-
-input:-ms-input-placeholder,
-textarea:-ms-input-placeholder {
-  color: rgb(107 114 128) !important;
-  opacity: 1 !important;
-}
-
-/* Ensure disabled inputs are still readable */
-input:disabled,
-textarea:disabled,
-select:disabled {
-  color: rgb(75 85 99) !important;
-  opacity: 0.7;
+.animate-slide-up {
+  animation: slide-up 0.4s ease-out;
 }
 
 /* Print styles for proposal */
 @media print {
-  /* Hide navigation and controls */
   nav,
   button,
   .no-print {
     display: none !important;
   }
 
-  /* Expand all sections */
   details {
     display: block !important;
   }
@@ -132,23 +127,19 @@ select:disabled {
     display: none !important;
   }
 
-  /* Better page breaks */
   .proposal-section {
     page-break-inside: avoid;
   }
 
-  /* Ensure diagrams fit on page */
   .mermaid-container svg {
     max-width: 100% !important;
     height: auto !important;
   }
 
-  /* Clean backgrounds for print */
   body {
     background: white !important;
   }
 
-  /* Remove shadows and borders for cleaner print */
   .border {
     border-color: #e5e7eb !important;
   }

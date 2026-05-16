@@ -16,9 +16,9 @@ export const AuthLink: React.FC<AuthLinkProps> = ({
     <Link
       href={href}
       className={`
-        text-blue-600 hover:text-blue-700
+        text-accent hover:text-accent-hover
         font-medium transition-colors duration-200
-        focus:outline-none focus:underline
+        focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-accent/30
         ${className}
       `}
     >
@@ -26,5 +26,3 @@ export const AuthLink: React.FC<AuthLinkProps> = ({
     </Link>
   );
 };
-
-// Made with Bob

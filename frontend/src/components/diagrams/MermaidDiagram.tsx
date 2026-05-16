@@ -55,7 +55,7 @@ export const MermaidDiagram: React.FC<MermaidDiagramProps> = ({ content, id }) =
       try {
         // Dynamically import mermaid to avoid SSR issues
         const mermaid = (await import('mermaid')).default;
-        
+
         if (!isMounted) {
           isRenderingRef.current = false;
           return;
@@ -79,13 +79,13 @@ export const MermaidDiagram: React.FC<MermaidDiagramProps> = ({ content, id }) =
 
         // Render the diagram
         const { svg } = await mermaid.render(diagramId, content);
-        
+
         // Clear timeout on success
         if (timeoutRef.current) {
           clearTimeout(timeoutRef.current);
           timeoutRef.current = null;
         }
-        
+
         if (isMounted && containerRef.current) {
           // Insert SVG
           containerRef.current.innerHTML = svg;
@@ -98,7 +98,7 @@ export const MermaidDiagram: React.FC<MermaidDiagramProps> = ({ content, id }) =
           clearTimeout(timeoutRef.current);
           timeoutRef.current = null;
         }
-        
+
         if (isMounted) {
           const errorMessage = err instanceof Error ? err.message : 'Failed to render diagram';
           setError(errorMessage);
@@ -130,7 +130,7 @@ export const MermaidDiagram: React.FC<MermaidDiagramProps> = ({ content, id }) =
       {/* Always render the container - this is critical */}
       <div
         ref={containerRef}
-        className="mermaid-container flex items-center justify-center overflow-auto rounded-lg border border-slate-200 bg-white p-6"
+          className="mermaid-container flex items-center justify-center overflow-auto rounded-xl border border-border bg-surface-raised p-6 shadow-inner shadow-black/[0.02]"
         style={{
           minHeight: '300px',
           opacity: isRendering ? 0.3 : 1,
@@ -140,42 +140,42 @@ export const MermaidDiagram: React.FC<MermaidDiagramProps> = ({ content, id }) =
 
       {/* Loading overlay */}
       {isRendering && (
-        <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-slate-50/90">
+        <div className="absolute inset-0 flex items-center justify-center rounded-xl bg-surface/90 backdrop-blur-sm">
           <div className="text-center">
-            <svg className="animate-spin h-8 w-8 text-blue-600 mx-auto mb-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <svg className="animate-spin h-8 w-8 text-accent mx-auto mb-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
-            <p className="text-sm text-slate-600">Rendering diagram...</p>
+            <p className="text-sm text-ink-muted">Rendering diagram...</p>
           </div>
         </div>
       )}
 
       {/* Error overlay */}
       {error && (
-        <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-red-50/95 p-6">
+        <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-error-soft/95 p-6">
           <div className="max-w-md w-full space-y-4">
             <div className="flex items-start">
-              <svg className="w-5 h-5 text-red-500 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <svg className="w-5 h-5 text-error mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
               </svg>
               <div className="flex-1">
-                <h4 className="text-sm font-semibold text-red-800 mb-1">Diagram Rendering Error</h4>
-                <p className="text-sm text-red-700 mb-3">{error}</p>
+                <h4 className="text-sm font-semibold text-error mb-1">Diagram Rendering Error</h4>
+                <p className="text-sm text-error mb-3">{error}</p>
                 <button
                   onClick={handleRetry}
-                  className="px-4 py-2 bg-red-600 text-white text-sm rounded-lg hover:bg-red-700 transition-colors"
+                  className="px-4 py-2 bg-error text-white text-sm rounded-lg hover:bg-error/90 transition-colors"
                 >
                   Retry
                 </button>
               </div>
             </div>
-            <details className="bg-white rounded-lg border border-red-200">
-              <summary className="px-3 py-2 cursor-pointer text-sm font-medium text-red-700 hover:bg-red-50 transition-colors">
+            <details className="bg-surface-raised rounded-lg border border-error/30">
+              <summary className="px-3 py-2 cursor-pointer text-sm font-medium text-error hover:bg-error-soft transition-colors">
                 View Raw Mermaid Code
               </summary>
-              <div className="px-3 py-2 border-t border-red-200">
-                <pre className="bg-gray-900 text-gray-100 p-3 rounded text-xs overflow-x-auto">
+              <div className="px-3 py-2 border-t border-error/30">
+                <pre className="bg-ink text-ink-faint p-3 rounded text-xs overflow-x-auto">
                   <code>{content}</code>
                 </pre>
               </div>
@@ -186,5 +186,3 @@ export const MermaidDiagram: React.FC<MermaidDiagramProps> = ({ content, id }) =
     </div>
   );
 };
-
-// Made with Bob

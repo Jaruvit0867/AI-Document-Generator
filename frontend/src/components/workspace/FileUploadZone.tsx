@@ -66,13 +66,13 @@ export const FileUploadZone: React.FC<FileUploadZoneProps> = ({
         onDrop={handleDrop}
         onClick={handleClick}
         className={`
-          cursor-pointer rounded-lg border border-dashed p-10 text-center transition-all
-          ${isDragging ? 'border-blue-500 bg-blue-50 shadow-inner' : 'border-slate-300 bg-slate-50/70 hover:border-blue-300 hover:bg-blue-50/40'}
+          cursor-pointer rounded-2xl border border-dashed p-10 text-center transition-all
+          ${isDragging ? 'border-accent bg-accent-soft' : 'border-border bg-surface-raised hover:-translate-y-0.5 hover:border-accent/40 hover:bg-accent-soft/30 hover:shadow-md'}
           ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}
         `}
       >
         <svg
-          className="mx-auto h-12 w-12 text-slate-400"
+          className="mx-auto h-12 w-12 text-ink-faint"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -84,12 +84,10 @@ export const FileUploadZone: React.FC<FileUploadZoneProps> = ({
             d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
           />
         </svg>
-        <p className="mt-4 text-sm text-slate-600">
-          <span className="font-semibold text-blue-600">Click to upload</span> or drag and drop
+        <p className="mt-4 text-sm text-ink-muted">
+          <span className="font-semibold text-accent">Click to upload</span> or drag and drop
         </p>
-        <p className="mt-1 text-xs text-slate-500">
-          TXT, PDF, or DOCX files
-        </p>
+        <p className="mt-1 text-xs text-ink-faint">TXT, PDF, DOCX</p>
       </div>
 
       <div className="mt-4">
@@ -108,5 +106,3 @@ export const FileUploadZone: React.FC<FileUploadZoneProps> = ({
     </div>
   );
 };
-
-// Made with Bob

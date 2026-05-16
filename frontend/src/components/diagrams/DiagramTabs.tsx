@@ -43,7 +43,7 @@ export const DiagramTabs: React.FC<DiagramTabsProps> = ({
   availableTypes,
 }) => {
   return (
-    <div className="border-b border-slate-200 px-4 py-3">
+    <div className="border-b border-border px-4 py-3">
       <nav className="flex gap-2 overflow-x-auto" aria-label="Diagram types">
         {availableTypes.map((type) => (
           <button
@@ -53,8 +53,8 @@ export const DiagramTabs: React.FC<DiagramTabsProps> = ({
               inline-flex shrink-0 items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors
               ${
                 activeType === type
-                  ? 'bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-200'
-                  : 'text-slate-600 hover:bg-slate-100 hover:text-slate-950'
+                  ? 'bg-accent-soft text-accent ring-1 ring-inset ring-accent/20'
+                  : 'text-ink-muted hover:bg-surface-raised hover:text-ink'
               }
             `}
           >
@@ -66,5 +66,3 @@ export const DiagramTabs: React.FC<DiagramTabsProps> = ({
     </div>
   );
 };
-
-// Made with Bob

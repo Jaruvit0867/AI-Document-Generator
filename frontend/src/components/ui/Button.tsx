@@ -11,11 +11,11 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantStyles: Record<ButtonVariant, string> = {
-  primary: 'bg-blue-600 text-white shadow-sm shadow-blue-600/20 hover:bg-blue-700 active:bg-blue-800 focus:ring-blue-500',
-  secondary: 'bg-slate-100 text-slate-900 hover:bg-slate-200 active:bg-slate-300 focus:ring-slate-400',
-  danger: 'bg-red-600 text-white shadow-sm shadow-red-600/20 hover:bg-red-700 active:bg-red-800 focus:ring-red-500',
-  ghost: 'bg-transparent text-slate-700 hover:bg-slate-100 active:bg-slate-200 focus:ring-slate-400',
-  outline: 'bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 active:bg-slate-100 focus:ring-slate-400',
+  primary: 'bg-accent text-white shadow-sm shadow-accent/25 hover:-translate-y-0.5 hover:bg-accent-hover hover:shadow-[0_0_20px_-5px_rgba(124,58,237,0.4)] active:translate-y-0 active:bg-accent-hover focus:ring-accent/30',
+  secondary: 'bg-border/50 text-ink hover:bg-border active:bg-border-strong focus:ring-border-strong',
+  danger: 'bg-error text-white shadow-sm shadow-error/25 hover:bg-red-700 active:bg-red-800 focus:ring-error/30',
+  ghost: 'bg-transparent text-ink-muted hover:bg-border/40 hover:text-ink active:bg-border focus:ring-border-strong',
+  outline: 'bg-surface-raised border border-border text-ink shadow-sm shadow-black/[0.02] hover:-translate-y-0.5 hover:border-border-strong hover:shadow-[0_0_15px_-5px_rgba(124,58,237,0.15)] active:translate-y-0 focus:ring-accent/30',
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
@@ -33,8 +33,8 @@ export const Button: React.FC<ButtonProps> = ({
   className = '',
   ...props
 }) => {
-  const baseStyles = 'inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50';
-  
+  const baseStyles = 'inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:pointer-events-none disabled:translate-y-0 disabled:opacity-50';
+
   return (
     <button
       className={`${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${className}`}
@@ -55,5 +55,3 @@ export const Button: React.FC<ButtonProps> = ({
     </button>
   );
 };
-
-// Made with Bob

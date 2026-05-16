@@ -54,7 +54,7 @@ export const ProjectList: React.FC<ProjectListProps> = ({
   if (error) {
     return (
       <div className="p-4">
-        <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+        <div className="rounded-lg border border-error/30 bg-error-soft p-3 text-sm text-error">
           {error}
         </div>
         <Button onClick={loadProjects} className="mt-4 w-full" size="sm">
@@ -66,11 +66,11 @@ export const ProjectList: React.FC<ProjectListProps> = ({
 
   return (
     <div className="flex h-full flex-col">
-      <div className="border-b border-slate-200 p-4">
+      <div className="border-b border-border p-4">
         <div className="mb-4 flex items-center justify-between">
           <div>
-            <h2 className="text-sm font-semibold text-slate-950">Projects</h2>
-            <p className="text-xs text-slate-500">
+            <h2 className="text-sm font-semibold text-ink">Workspaces</h2>
+            <p className="text-xs text-ink-faint">
               {projects.length} {projects.length === 1 ? 'workspace' : 'workspaces'}
             </p>
           </div>
@@ -85,8 +85,8 @@ export const ProjectList: React.FC<ProjectListProps> = ({
             New
           </Button>
         </div>
-        <div className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs leading-5 text-slate-600">
-          Select a project to manage source docs, run extraction, and review generated outputs.
+        <div className="rounded-xl border border-accent/20 bg-accent-soft px-3 py-2 text-xs leading-5 text-accent">
+          Upload requirements, generate plans, export deliverables.
         </div>
       </div>
 
@@ -95,7 +95,7 @@ export const ProjectList: React.FC<ProjectListProps> = ({
           <EmptyState
             icon={<FolderIcon />}
             title="No projects yet"
-            description="Create a project workspace before uploading requirements."
+            description="Create a workspace to start planning."
             action={
               <Button onClick={() => setIsCreateModalOpen(true)} size="sm">
                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -127,5 +127,3 @@ export const ProjectList: React.FC<ProjectListProps> = ({
     </div>
   );
 };
-
-// Made with Bob

@@ -12,7 +12,7 @@ interface ChatMessageProps {
 
 export default function ChatMessage({ role, content, timestamp }: ChatMessageProps) {
   const isUser = role === 'user';
-  
+
   const formattedTime = React.useMemo(() => {
     try {
       return formatDistanceToNow(new Date(timestamp), { addSuffix: true });
@@ -27,7 +27,7 @@ export default function ChatMessage({ role, content, timestamp }: ChatMessagePro
         {/* Avatar */}
         <div
           className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-sm font-semibold text-white ${
-            isUser ? 'bg-blue-600' : 'bg-slate-700'
+            isUser ? 'bg-accent' : 'bg-ink'
           }`}
           aria-label={isUser ? 'User' : 'Assistant'}
         >
@@ -39,8 +39,8 @@ export default function ChatMessage({ role, content, timestamp }: ChatMessagePro
           <div
             className={`rounded-lg px-4 py-3 ${
               isUser
-                ? 'bg-blue-600 text-white'
-                : 'border border-slate-200 bg-white text-slate-900 shadow-sm shadow-slate-950/[0.03]'
+                ? 'bg-accent text-white'
+                : 'border border-border bg-surface-raised text-ink shadow-sm shadow-black/[0.03]'
             }`}
           >
             {isUser ? (
@@ -50,17 +50,17 @@ export default function ChatMessage({ role, content, timestamp }: ChatMessagePro
                 <ReactMarkdown
                   components={{
                     p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
-                    strong: ({ children }) => <strong className="font-semibold text-slate-950">{children}</strong>,
+                    strong: ({ children }) => <strong className="font-semibold text-ink">{children}</strong>,
                     ul: ({ children }) => <ul className="mb-2 list-disc space-y-1 pl-5 last:mb-0">{children}</ul>,
                     ol: ({ children }) => <ol className="mb-2 list-decimal space-y-1 pl-5 last:mb-0">{children}</ol>,
                     li: ({ children }) => <li>{children}</li>,
                     code: ({ children }) => (
-                      <code className="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-xs text-slate-900">
+                      <code className="rounded bg-border/40 px-1.5 py-0.5 font-mono text-xs text-ink">
                         {children}
                       </code>
                     ),
                     pre: ({ children }) => (
-                      <pre className="mb-2 overflow-x-auto rounded-lg bg-slate-950 p-3 text-xs text-slate-100 last:mb-0">
+                      <pre className="mb-2 overflow-x-auto rounded-lg bg-ink p-3 text-xs text-white last:mb-0">
                         {children}
                       </pre>
                     ),
@@ -71,10 +71,10 @@ export default function ChatMessage({ role, content, timestamp }: ChatMessagePro
               </div>
             )}
           </div>
-          
+
           {/* Timestamp */}
           <div
-            className={`mt-1 text-xs text-slate-500 ${isUser ? 'text-right' : 'text-left'}`}
+            className={`mt-1 text-xs text-ink-faint ${isUser ? 'text-right' : 'text-left'}`}
           >
             {formattedTime}
           </div>
@@ -83,5 +83,3 @@ export default function ChatMessage({ role, content, timestamp }: ChatMessagePro
     </div>
   );
 }
-
-// Made with Bob

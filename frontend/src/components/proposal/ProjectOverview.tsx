@@ -11,25 +11,25 @@ export const ProjectOverview: React.FC<ProjectOverviewProps> = ({ data }) => {
     <ProposalSection title="Project Overview">
       <div className="space-y-4">
         <div>
-          <h4 className="mb-2 text-sm font-semibold text-slate-700">Project Name</h4>
-          <p className="text-sm leading-6 text-slate-950">{data.project_name}</p>
+          <h4 className="mb-2 text-sm font-semibold text-ink-muted">Project Name</h4>
+          <p className="text-sm leading-6 text-ink">{data.project_name}</p>
         </div>
 
         <div>
-          <h4 className="mb-2 text-sm font-semibold text-slate-700">Problem Statement</h4>
-          <p className="whitespace-pre-wrap text-sm leading-6 text-slate-950">{data.problem}</p>
+          <h4 className="mb-2 text-sm font-semibold text-ink-muted">Problem Statement</h4>
+          <p className="whitespace-pre-wrap text-sm leading-6 text-ink">{data.problem}</p>
         </div>
 
         <div>
-          <h4 className="mb-2 text-sm font-semibold text-slate-700">Proposed Solution</h4>
-          <p className="whitespace-pre-wrap text-sm leading-6 text-slate-950">{data.proposed_solution}</p>
+          <h4 className="mb-2 text-sm font-semibold text-ink-muted">Proposed Solution</h4>
+          <p className="whitespace-pre-wrap text-sm leading-6 text-ink">{data.proposed_solution}</p>
         </div>
 
         <div>
-          <h4 className="mb-2 text-sm font-semibold text-slate-700">Target Users</h4>
+          <h4 className="mb-2 text-sm font-semibold text-ink-muted">Target Users</h4>
           <ul className="list-inside list-disc space-y-1">
             {data.target_users.map((user, index) => (
-              <li key={index} className="text-sm leading-6 text-slate-950">{user}</li>
+              <li key={index} className="text-sm leading-6 text-ink">{user}</li>
             ))}
           </ul>
         </div>
@@ -37,5 +37,3 @@ export const ProjectOverview: React.FC<ProjectOverviewProps> = ({ data }) => {
     </ProposalSection>
   );
 };
-
-// Made with Bob

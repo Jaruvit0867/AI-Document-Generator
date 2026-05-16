@@ -28,19 +28,19 @@ export const ProjectHeader: React.FC<ProjectHeaderProps> = ({ project, onDeleted
   };
 
   return (
-    <div className="border-b border-slate-200 bg-white px-5 py-5 sm:px-6">
+    <div className="border-b border-border bg-surface-raised/90 px-5 py-5 backdrop-blur sm:px-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex-1 min-w-0">
           <div className="mb-2 flex flex-wrap items-center gap-3">
-            <h1 className="truncate text-2xl font-semibold tracking-tight text-slate-950">
+            <h1 className="truncate text-2xl font-semibold tracking-tight text-ink">
               {project.name}
             </h1>
             {getStatusBadge()}
           </div>
           {project.description && (
-            <p className="mb-2 max-w-3xl text-sm leading-6 text-slate-600">{project.description}</p>
+            <p className="mb-2 line-clamp-2 max-w-3xl text-sm leading-6 text-ink-muted">{project.description}</p>
           )}
-          <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
+          <p className="text-xs font-medium uppercase tracking-wide text-ink-faint">
             Created {formatDate(project.created_at)}
           </p>
         </div>
@@ -57,5 +57,3 @@ export const ProjectHeader: React.FC<ProjectHeaderProps> = ({ project, onDeleted
     </div>
   );
 };
-
-// Made with Bob

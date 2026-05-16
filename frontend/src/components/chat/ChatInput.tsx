@@ -22,7 +22,7 @@ export default function ChatInput({
     if (trimmedMessage && !disabled) {
       onSendMessage(trimmedMessage);
       setMessage('');
-      
+
       // Reset textarea height
       if (textareaRef.current) {
         textareaRef.current.style.height = 'auto';
@@ -40,7 +40,7 @@ export default function ChatInput({
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value);
-    
+
     // Auto-resize textarea
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
@@ -49,7 +49,7 @@ export default function ChatInput({
   };
 
   return (
-    <div className="border-t border-slate-200 bg-white p-4">
+    <div className="border-t border-border bg-surface-raised p-4">
       <div className="flex items-end gap-2">
         <div className="flex-1">
           <textarea
@@ -60,19 +60,19 @@ export default function ChatInput({
             placeholder={placeholder}
             disabled={disabled}
             rows={1}
-            className="w-full resize-none rounded-lg border border-slate-300 px-4 py-3 text-sm leading-6 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 disabled:cursor-not-allowed disabled:bg-slate-100"
+            className="w-full resize-none rounded-lg border border-border px-4 py-3 text-sm leading-6 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 disabled:cursor-not-allowed disabled:bg-border/20"
             style={{ maxHeight: '200px' }}
             aria-label="Chat message input"
           />
-          <div className="mt-1 text-xs text-slate-500">
+          <div className="mt-1 text-xs text-ink-faint">
             Press Enter to send, Shift+Enter for new line
           </div>
         </div>
-        
+
         <Button
           onClick={handleSend}
           disabled={disabled || !message.trim()}
-          className="h-[50px] px-4"
+          className="h-[50px] px-4 bg-accent"
           aria-label="Send message"
         >
           <svg
@@ -94,5 +94,3 @@ export default function ChatInput({
     </div>
   );
 }
-
-// Made with Bob
