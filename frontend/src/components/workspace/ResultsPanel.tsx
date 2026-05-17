@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Project, Diagram, Document } from '@/types/api';
 import { ProposalView } from '@/components/proposal';
 import { DiagramView } from '@/components/diagrams';
@@ -17,35 +17,72 @@ export const ResultsPanel: React.FC<ResultsPanelProps> = ({ project, refreshKey 
   const [activeTab, setActiveTab] = useState<TabType>('proposal');
   const [diagrams, setDiagrams] = useState<Diagram[]>([]);
   const [isLoadingDiagrams, setIsLoadingDiagrams] = useState(false);
+  const [hasLoadedDiagrams, setHasLoadedDiagrams] = useState(false);
   const [documents, setDocuments] = useState<Document[]>([]);
   const [isLoadingDocuments, setIsLoadingDocuments] = useState(false);
+  const [hasLoadedDocuments, setHasLoadedDocuments] = useState(false);
   const [error, setError] = useState('');
+  const diagramsRequestRef = useRef(0);
+  const documentsRequestRef = useRef(0);
+
+  useEffect(() => {
+    diagramsRequestRef.current += 1;
+    documentsRequestRef.current += 1;
+    setActiveTab('proposal');
+    setDiagrams([]);
+    setDocuments([]);
+    setIsLoadingDiagrams(false);
+    setIsLoadingDocuments(false);
+    setHasLoadedDiagrams(false);
+    setHasLoadedDocuments(false);
+    setError('');
+  }, [project.id]);
 
   const loadDiagrams = useCallback(async () => {
+    const requestId = diagramsRequestRef.current + 1;
+    diagramsRequestRef.current = requestId;
     setIsLoadingDiagrams(true);
     setError('');
 
     try {
       const diagramList = await api.diagrams.list(project.id);
-      setDiagrams(diagramList);
+      if (diagramsRequestRef.current === requestId) {
+        setDiagrams(diagramList);
+        setHasLoadedDiagrams(true);
+      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load diagrams');
+      if (diagramsRequestRef.current === requestId) {
+        setError(err instanceof Error ? err.message : 'Failed to load diagrams');
+      }
     } finally {
-      setIsLoadingDiagrams(false);
+      if (diagramsRequestRef.current === requestId) {
+        setHasLoadedDiagrams(true);
+        setIsLoadingDiagrams(false);
+      }
     }
   }, [project.id]);
 
   const loadDocuments = useCallback(async () => {
+    const requestId = documentsRequestRef.current + 1;
+    documentsRequestRef.current = requestId;
     setIsLoadingDocuments(true);
     setError('');
 
     try {
       const data = await api.documents.list(project.id);
-      setDocuments(data.documents);
+      if (documentsRequestRef.current === requestId) {
+        setDocuments(data.documents);
+        setHasLoadedDocuments(true);
+      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load documents');
+      if (documentsRequestRef.current === requestId) {
+        setError(err instanceof Error ? err.message : 'Failed to load documents');
+      }
     } finally {
-      setIsLoadingDocuments(false);
+      if (documentsRequestRef.current === requestId) {
+        setHasLoadedDocuments(true);
+        setIsLoadingDocuments(false);
+      }
     }
   }, [project.id]);
 
@@ -57,12 +94,20 @@ export const ResultsPanel: React.FC<ResultsPanelProps> = ({ project, refreshKey 
 
   // Also load when tab changes (for refresh scenarios)
   useEffect(() => {
-    if (activeTab === 'diagrams' && diagrams.length === 0) {
+    if (activeTab === 'diagrams' && !hasLoadedDiagrams && !isLoadingDiagrams) {
       loadDiagrams();
-    } else if (activeTab === 'chat' && documents.length === 0) {
+    } else if (activeTab === 'chat' && !hasLoadedDocuments && !isLoadingDocuments) {
       loadDocuments();
     }
-  }, [activeTab, diagrams.length, documents.length, loadDiagrams, loadDocuments]);
+  }, [
+    activeTab,
+    hasLoadedDiagrams,
+    hasLoadedDocuments,
+    isLoadingDiagrams,
+    isLoadingDocuments,
+    loadDiagrams,
+    loadDocuments,
+  ]);
 
   if (!project.extraction_result) {
     return null;
@@ -147,6 +192,7 @@ export const ResultsPanel: React.FC<ResultsPanelProps> = ({ project, refreshKey 
 
         {activeTab === 'proposal' && (
           <ProposalView
+            key={`proposal-${project.id}`}
             proposal={project.extraction_result}
             projectName={project.name}
             diagrams={diagrams}
@@ -158,7 +204,7 @@ export const ResultsPanel: React.FC<ResultsPanelProps> = ({ project, refreshKey 
             {isLoadingDiagrams ? (
               <Loading message="Loading diagrams..." />
             ) : (
-              <DiagramView diagrams={diagrams} />
+              <DiagramView key={`diagrams-${project.id}`} diagrams={diagrams} />
             )}
           </>
         )}
@@ -169,6 +215,7 @@ export const ResultsPanel: React.FC<ResultsPanelProps> = ({ project, refreshKey 
           ) : (
             <div className="h-[600px] overflow-hidden rounded-lg border border-border bg-surface">
               <ChatView
+                key={`chat-${project.id}`}
                 projectId={project.id}
                 hasDocuments={documents.length > 0}
                 hasEmbeddings={documents.length > 0}

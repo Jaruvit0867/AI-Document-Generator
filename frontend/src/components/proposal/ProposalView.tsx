@@ -9,6 +9,7 @@ import { BusinessProcess } from './BusinessProcess';
 import { Scope } from './Scope';
 import { Architecture } from './Architecture';
 import { Timeline } from './Timeline';
+import { RisksAndQuestions } from './RisksAndQuestions';
 import { Button } from '@/components/ui';
 import { ProposalDocument } from './export/ProposalDocument';
 import { exportToDocx } from './export/exportDocx';
@@ -184,6 +185,10 @@ export const ProposalView: React.FC<ProposalViewProps> = ({
         <Scope data={proposal.scope} />
         <Architecture data={proposal.architecture} />
         <Timeline milestones={proposal.timeline} />
+        <RisksAndQuestions
+          risks={proposal.risks}
+          openQuestions={proposal.open_questions}
+        />
       </div>
 
       <div

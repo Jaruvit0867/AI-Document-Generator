@@ -138,6 +138,8 @@ export interface ProposalResponse {
   scope: Scope;
   architecture: Architecture;
   timeline: string[];
+  risks?: string[];
+  open_questions?: string[];
   diagrams?: Diagram[];
 }
 

@@ -168,7 +168,11 @@ export const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({
           {/* Results Panel - Show after extraction is complete */}
           {hasExtraction && (
             <div className="mt-8">
-              <ResultsPanel project={currentProject} refreshKey={resultsRefreshKey} />
+              <ResultsPanel
+                key={currentProject.id}
+                project={currentProject}
+                refreshKey={resultsRefreshKey}
+              />
             </div>
           )}
         </div>

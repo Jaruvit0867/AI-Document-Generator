@@ -8,5 +8,6 @@ export { BusinessProcess } from './BusinessProcess';
 export { Scope } from './Scope';
 export { Architecture } from './Architecture';
 export { Timeline } from './Timeline';
+export { RisksAndQuestions } from './RisksAndQuestions';
 
 // Made with Bob

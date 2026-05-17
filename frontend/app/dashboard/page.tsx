@@ -116,6 +116,7 @@ export default function DashboardPage() {
         <main className="flex-1 overflow-hidden">
           {selectedProject ? (
             <WorkspaceLayout
+              key={selectedProject.id}
               project={selectedProject}
               onProjectDeleted={handleProjectDeleted}
               onProjectUpdated={handleProjectUpdated}

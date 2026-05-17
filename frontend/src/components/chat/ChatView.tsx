@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import api from '@/lib/api';
 import { ChatMessage as APIChatMessage } from '@/types/api';
 import ChatHistory from './ChatHistory';
@@ -34,6 +34,11 @@ export default function ChatView({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const activeProjectIdRef = useRef(projectId);
+
+  useEffect(() => {
+    activeProjectIdRef.current = projectId;
+  }, [projectId]);
 
   // Convert API chat messages to display format
   const convertToDisplayMessages = useCallback((apiMessages: APIChatMessage[]): DisplayMessage[] => {
@@ -58,34 +63,51 @@ export default function ChatView({
     return displayMessages;
   }, []);
 
-  // Load chat history on mount
+  // Load chat history whenever the active project changes.
   useEffect(() => {
+    let isCancelled = false;
+    activeProjectIdRef.current = projectId;
+    setMessages([]);
+    setError(null);
+    setIsLoading(false);
+
     const loadHistory = async () => {
       if (!hasDocuments || !hasEmbeddings) {
-        setIsInitialLoading(false);
+        if (!isCancelled) {
+          setIsInitialLoading(false);
+        }
         return;
       }
 
       try {
         setIsInitialLoading(true);
         const history = await api.chat.getHistory(projectId);
+        if (isCancelled || activeProjectIdRef.current !== projectId) return;
         const displayMessages = convertToDisplayMessages(history);
         setMessages(displayMessages);
         setError(null);
       } catch (err) {
+        if (isCancelled || activeProjectIdRef.current !== projectId) return;
         console.error('Failed to load chat history:', err);
         setError('Failed to load chat history');
       } finally {
-        setIsInitialLoading(false);
+        if (!isCancelled && activeProjectIdRef.current === projectId) {
+          setIsInitialLoading(false);
+        }
       }
     };
 
     loadHistory();
+
+    return () => {
+      isCancelled = true;
+    };
   }, [projectId, hasDocuments, hasEmbeddings, convertToDisplayMessages]);
 
   // Send message handler
   const handleSendMessage = async (message: string) => {
     if (!message.trim() || isLoading) return;
+    const targetProjectId = projectId;
 
     // Add user message immediately for better UX
     const userMessage: DisplayMessage = {
@@ -98,7 +120,8 @@ export default function ChatView({
     setError(null);
 
     try {
-      const response = await api.chat.sendMessage(projectId, message);
+      const response = await api.chat.sendMessage(targetProjectId, message);
+      if (activeProjectIdRef.current !== targetProjectId) return;
 
       // Add assistant response
       const assistantMessage: DisplayMessage = {
@@ -108,13 +131,16 @@ export default function ChatView({
       };
       setMessages((prev) => [...prev, assistantMessage]);
     } catch (err: unknown) {
+      if (activeProjectIdRef.current !== targetProjectId) return;
       console.error('Failed to send message:', err);
       setError(getErrorMessage(err, 'Failed to send message'));
 
       // Remove the optimistically added user message on error
       setMessages((prev) => prev.slice(0, -1));
     } finally {
-      setIsLoading(false);
+      if (activeProjectIdRef.current === targetProjectId) {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -124,16 +150,22 @@ export default function ChatView({
       return;
     }
 
+    const targetProjectId = projectId;
+
     try {
       setIsLoading(true);
-      await api.chat.clearHistory(projectId);
+      await api.chat.clearHistory(targetProjectId);
+      if (activeProjectIdRef.current !== targetProjectId) return;
       setMessages([]);
       setError(null);
     } catch (err: unknown) {
+      if (activeProjectIdRef.current !== targetProjectId) return;
       console.error('Failed to clear chat history:', err);
       setError(getErrorMessage(err, 'Failed to clear chat history'));
     } finally {
-      setIsLoading(false);
+      if (activeProjectIdRef.current === targetProjectId) {
+        setIsLoading(false);
+      }
     }
   };
 
