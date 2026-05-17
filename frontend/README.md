@@ -1,419 +1,285 @@
-# AI Document Generator - Frontend
+# Vision Draft Frontend
 
-A modern web application for AI-powered document analysis, proposal generation, and interactive chat with your documents. Built with Next.js 16, React 19, and TypeScript.
+Vision Draft is a SaaS-style frontend for turning raw requirements and uploaded documents into actionable development plans. It connects to the FastAPI backend, lets users manage projects, upload source documents, run the AI processing pipeline, review generated proposals and diagrams, chat with project documents, and export deliverables.
 
-## 🎯 Overview
+## What This App Does
 
-This frontend application provides an intuitive interface for:
-- Managing multiple projects with document collections
-- Uploading and analyzing requirements documents
-- AI-powered extraction of project requirements
-- Automatic generation of technical proposals
-- Interactive Mermaid diagrams (system architecture, user flows, data models)
-- RAG-based chat interface for querying your documents
-- Export functionality for proposals and diagrams
+- Public landing page for the product story and demo entry point.
+- Login and registration screens with JWT authentication.
+- Project dashboard with a project navigator and workspace area.
+- Document input through pasted text or file upload.
+- Processing pipeline for embeddings, extraction, diagrams, and proposal readiness.
+- Proposal viewer with structured requirement sections.
+- Diagram viewer for Mermaid diagrams with tabs, zoom, fullscreen, annotation, and export controls.
+- RAG-style project chat using uploaded documents as context.
+- Export tools for Markdown, PDF, Word, and diagram assets.
 
-## ✨ Features
+## Tech Stack
 
-### Authentication
-- User registration and login
-- JWT-based authentication with localStorage
-- Protected routes and automatic token refresh
-- Session management with 24-hour token expiration
+| Area | Technology | Purpose |
+| --- | --- | --- |
+| Framework | Next.js 16 App Router | Routing, layouts, production build, static pages |
+| UI runtime | React 19 | Component model and client-side interactivity |
+| Language | TypeScript 5 | Type-safe API contracts, props, and component state |
+| Styling | TailwindCSS 4 | Utility-first design system and responsive layout |
+| Motion | Framer Motion 12 | Landing/auth/dashboard transitions and micro-interactions |
+| Diagrams | Mermaid 11 | Rendering generated architecture/user-flow/data diagrams |
+| Markdown | react-markdown 9 | Rendering AI chat responses cleanly |
+| Export | html2canvas, jsPDF, docx, file-saver | Proposal and diagram export flows |
+| Dates | date-fns | Date formatting helpers |
+| Utilities | clsx, tailwind-merge | Class composition and style merging |
 
-### Project Management
-- Create and manage multiple projects
-- Project-level document organization
-- Delete projects with confirmation
-- Project status tracking
+## How The Frontend Works
 
-### Document Processing
-- **Text Input**: Paste requirements directly (auto-converts to file)
-- **File Upload**: Drag-and-drop or click to upload
-- Supported formats: TXT, MD, PDF, DOCX
-- Multiple document upload per project
+### 1. App Routes
 
-### AI-Powered Processing Pipeline
-1. **Document Upload**: Add requirements documents
-2. **Embedding Generation**: Process documents for semantic search
-3. **AI Extraction**: Extract structured requirements (30-60 seconds)
-4. **Diagram Generation**: Create Mermaid diagrams automatically
-5. **Proposal Generation**: Generate comprehensive technical proposal
+- `app/page.tsx` renders the public landing page.
+- `app/auth/login/page.tsx` and `app/auth/register/page.tsx` handle authentication.
+- `app/dashboard/page.tsx` is the protected workspace for projects.
+- `app/layout.tsx` sets global fonts, metadata, and `AuthProvider`.
+- `app/globals.css` defines Tailwind theme tokens, global styles, and print/export styles.
 
-### Interactive Diagrams
-- **System Architecture**: High-level system design
-- **User Flow**: User journey and interactions
-- **Development Workflow**: Development process and stages
-- **Data Model**: Database schema and relationships
-- Zoom controls and fullscreen mode
-- Export diagrams as PNG or SVG
+### 2. Authentication
 
-### Proposal Viewer
-- Project overview and objectives
-- Detailed requirements breakdown
-- Feature specifications
-- Technical architecture
-- Timeline and milestones
-- Business process analysis
-- Scope definition
-- Risks and open questions
-- User flow documentation
+- Auth forms call `api.auth.login` or `api.auth.register` from `src/lib/api.ts`.
+- The backend returns a JWT access token.
+- `src/lib/auth.ts` stores the token in `localStorage`.
+- `apiFetch` automatically attaches `Authorization: Bearer <token>` to protected requests.
+- A `401` response clears the token and redirects the user to `/auth/login`.
 
-### RAG Chat
-- Chat with your documents using AI
-- Context-aware responses based on uploaded documents
-- Chat history per project
-- Markdown formatting support
-- Requires documents and embeddings to be processed first
+Current MVP tradeoff: token storage uses `localStorage`, which is simple for a hackathon demo. A production version should consider httpOnly cookies and refresh tokens.
 
-### Export Capabilities
-- Export full proposal as Markdown
-- Export individual diagrams
-- Download chat history
+### 3. Project Workspace Flow
 
-## 🛠 Tech Stack
+1. `ProjectList` loads projects from `GET /projects/`.
+2. Selecting a project mounts `WorkspaceLayout` with that project id.
+3. `WorkspaceLayout` loads project documents from `GET /projects/{id}/documents/`.
+4. Users can upload files or paste text. Pasted text is converted to a `requirements.txt` file before upload because the backend accepts document uploads.
+5. `ProcessingPipeline` runs the backend pipeline in order:
+   - `POST /projects/{id}/process-embeddings`
+   - `POST /projects/{id}/extract`
+   - `POST /projects/{id}/diagrams/generate`
+6. After processing completes, the project is refreshed and `ResultsPanel` appears.
 
-- **Framework**: Next.js 16 (App Router)
-- **UI Library**: React 19
-- **Language**: TypeScript 5
-- **Styling**: TailwindCSS 4
-- **Diagrams**: Mermaid.js 11.4
-- **Date Handling**: date-fns 4.1
-- **Markdown**: react-markdown 9.0
-- **Utilities**: clsx, tailwind-merge
+The workspace is keyed by project id so switching projects remounts project-specific state. Results, diagrams, and chat also guard against stale async responses from a previous project.
 
-## 📋 Prerequisites
+### 4. Proposal Output
 
-- Node.js 18+ (LTS recommended)
-- npm, yarn, pnpm, or bun
-- Backend API running at `https://backend-hackaton-v2.vercel.app`
+`ProposalView` displays the structured extraction result:
 
-## 🚀 Installation
+- Project Overview
+- Requirements
+- Feature Breakdown
+- User Flow
+- Business Process
+- Project Scope
+- Technical Architecture
+- Timeline & Milestones
+- Risks & Open Questions, only when the backend sends them
 
-1. **Clone the repository**:
-```bash
-git clone <repository-url>
-cd ibm_hackathon/frontend
+Export note: Risks and Open Questions are intentionally shown only in the app UI. They are not included in Markdown/PDF/Word exports.
+
+### 5. Diagram Output
+
+- `ResultsPanel` fetches diagrams from `GET /projects/{id}/diagrams`.
+- `DiagramView` groups diagrams by type and renders the selected diagram.
+- `MermaidDiagram` renders Mermaid source, supports zoom/pan/fullscreen, and includes annotation tools.
+- `DiagramControls` provides copy/download/open actions for Mermaid content and diagram assets.
+
+Diagram types currently supported by the frontend type contract:
+
+- `system_architecture`
+- `user_flow`
+- `development_workflow`
+- `data_model`
+
+### 6. Chat Output
+
+- `ChatView` loads history from `GET /projects/{id}/chat`.
+- Sending a message calls `POST /projects/{id}/chat`.
+- Clearing history calls `DELETE /projects/{id}/chat`.
+- Chat is enabled when the project has documents and embeddings context.
+- AI responses are rendered with markdown formatting.
+
+### 7. Export Flow
+
+- Markdown export is generated directly in `ProposalView`.
+- PDF export uses a hidden `ProposalDocument` render target plus `html2canvas` and `jsPDF`.
+- Word export uses `docx` and attempts to render Mermaid diagrams into images before packaging the document.
+- Export actions show an in-app loading overlay instead of browser alerts.
+
+## Project Structure
+
+```text
+frontend/
+├── app/
+│   ├── auth/                  # Login/register routes and auth layout
+│   ├── dashboard/             # Protected dashboard route
+│   ├── page.tsx               # Landing page route
+│   ├── layout.tsx             # Root layout, fonts, AuthProvider
+│   └── globals.css            # Tailwind theme and global styles
+├── assets/                    # App logo assets
+├── public/                    # Static public assets
+├── src/
+│   ├── components/
+│   │   ├── auth/              # Auth form primitives
+│   │   ├── brand/             # Vision Draft logo component
+│   │   ├── chat/              # Project chat UI
+│   │   ├── diagrams/          # Mermaid viewer, tabs, controls
+│   │   ├── marketing/         # Landing/auth visual components
+│   │   ├── projects/          # Project list, cards, create/delete UI
+│   │   ├── proposal/          # Proposal sections and export helpers
+│   │   ├── ui/                # Shared UI primitives
+│   │   └── workspace/         # Uploads, documents, pipeline, results tabs
+│   ├── contexts/
+│   │   └── AuthContext.tsx    # Auth state provider
+│   ├── lib/
+│   │   ├── api.ts             # Typed backend API client
+│   │   ├── auth.ts            # Token/session helpers
+│   │   └── utils.ts           # Shared utilities
+│   └── types/
+│       └── api.ts             # API response/request types
+├── API_DOCUMENTATION.md       # Backend API reference used by the frontend
+├── package.json
+└── README.md
 ```
 
-2. **Install dependencies**:
-```bash
-npm install
-# or
-yarn install
-# or
-pnpm install
-```
+## Environment Variables
 
-3. **Set up environment variables**:
-Create a `.env.local` file in the frontend directory:
+Create `.env.local` in `frontend/`:
+
 ```env
 NEXT_PUBLIC_API_BASE_URL=https://backend-hackaton-v2.vercel.app
 ```
 
 For local backend development:
+
 ```env
 NEXT_PUBLIC_API_BASE_URL=http://localhost:8000
 ```
 
-## 🏃 Running the Application
+`NEXT_PUBLIC_API_BASE_URL` is required because the frontend runs API calls from the browser.
 
-### Development Mode
+## Install And Run
+
 ```bash
+npm install
 npm run dev
 ```
-Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-### Production Build
+Open [http://localhost:3000](http://localhost:3000).
+
+Production build:
+
 ```bash
 npm run build
 npm start
 ```
 
-### Linting
+Lint:
+
 ```bash
 npm run lint
 ```
 
-## 📁 Project Structure
+## API Endpoints Used
 
-```
-frontend/
-├── app/                          # Next.js App Router
-│   ├── auth/                     # Authentication pages
-│   │   ├── login/               # Login page
-│   │   └── register/            # Registration page
-│   ├── dashboard/               # Main dashboard
-│   ├── layout.tsx               # Root layout
-│   ├── page.tsx                 # Landing page
-│   └── globals.css              # Global styles
-├── src/
-│   ├── components/              # React components
-│   │   ├── auth/               # Auth components (inputs, buttons, forms)
-│   │   ├── chat/               # Chat interface components
-│   │   ├── diagrams/           # Diagram viewer and controls
-│   │   ├── projects/           # Project management components
-│   │   ├── proposal/           # Proposal viewer sections
-│   │   ├── ui/                 # Reusable UI components
-│   │   └── workspace/          # Document upload and processing
-│   ├── contexts/               # React contexts
-│   │   └── AuthContext.tsx    # Authentication state management
-│   ├── lib/                    # Utility libraries
-│   │   ├── api.ts             # API client functions
-│   │   ├── auth.ts            # Auth utilities
-│   │   └── utils.ts           # Helper functions
-│   └── types/                  # TypeScript type definitions
-│       └── api.ts             # API response types
-├── public/                      # Static assets
-├── .env.local                   # Environment variables (create this)
-├── next.config.ts              # Next.js configuration
-├── tailwind.config.ts          # TailwindCSS configuration
-├── tsconfig.json               # TypeScript configuration
-└── package.json                # Dependencies and scripts
-```
+Authentication:
 
-## 🔑 Key Components
+- `POST /auth/register`
+- `POST /auth/login`
+- `GET /auth/me`
 
-### Authentication (`src/components/auth/`)
-- **AuthInput**: Styled input fields for forms
-- **AuthButton**: Primary action buttons
-- **AuthError**: Error message display
-- **AuthLink**: Navigation links between auth pages
+Projects:
 
-### Workspace (`src/components/workspace/`)
-- **WorkspaceLayout**: Main project workspace container
-- **InputPanel**: Document upload interface
-- **FileUploadZone**: Drag-and-drop file upload
-- **TextInputForm**: Text paste with auto-conversion to file
-- **DocumentList**: Display uploaded documents
-- **ProcessingPipeline**: Step-by-step processing status
-- **ResultsPanel**: Tabbed view for diagrams, proposal, and chat
+- `GET /projects/`
+- `POST /projects/`
+- `GET /projects/{project_id}`
+- `PUT /projects/{project_id}`
+- `DELETE /projects/{project_id}`
 
-### Diagrams (`src/components/diagrams/`)
-- **DiagramView**: Main diagram container
-- **DiagramTabs**: Switch between diagram types
-- **MermaidDiagram**: Mermaid.js renderer with zoom/export
-- **DiagramControls**: Zoom, fullscreen, export controls
+Documents:
 
-### Proposal (`src/components/proposal/`)
-- **ProposalView**: Main proposal container
-- **ProposalSection**: Reusable section wrapper
-- **ProjectOverview**: Project summary and objectives
-- **Requirements**: Functional and non-functional requirements
-- **FeatureBreakdown**: Detailed feature specifications
-- **Architecture**: Technical architecture details
-- **Timeline**: Project timeline and milestones
-- **Scope**: In-scope and out-of-scope items
-- **RisksAndQuestions**: Risk assessment and open questions
+- `GET /projects/{project_id}/documents/`
+- `POST /projects/{project_id}/documents/upload`
+- `GET /projects/{project_id}/documents/{document_id}`
+- `DELETE /projects/{project_id}/documents/{document_id}`
 
-### Chat (`src/components/chat/`)
-- **ChatView**: Main chat interface
-- **ChatHistory**: Message list with markdown support
-- **ChatInput**: Message input with send button
-- **ChatMessage**: Individual message component
-- **ChatWelcome**: Empty state with instructions
+Processing:
 
-## 🔌 API Integration
+- `POST /projects/{project_id}/process-embeddings`
+- `POST /projects/{project_id}/extract`
+- `GET /projects/{project_id}/extraction`
+- `GET /projects/{project_id}/proposal`
 
-### Base URL Configuration
-All API calls use the `NEXT_PUBLIC_API_BASE_URL` environment variable:
-```typescript
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://backend-hackaton-v2.vercel.app';
-```
+Diagrams:
 
-### Authentication Flow
-1. User registers/logs in via `/auth/register` or `/auth/login`
-2. Backend returns JWT token
-3. Token stored in `localStorage` as `token`
-4. All subsequent requests include: `Authorization: Bearer ${token}`
-5. 401 responses clear token and redirect to login
+- `POST /projects/{project_id}/diagrams/generate`
+- `GET /projects/{project_id}/diagrams`
+- `GET /projects/{project_id}/diagrams/{diagram_id}`
+- `DELETE /projects/{project_id}/diagrams`
 
-### API Endpoints Used
-- `POST /auth/register` - User registration
-- `POST /auth/login` - User login
-- `GET /projects/` - List user's projects
-- `POST /projects/` - Create new project (note trailing slash!)
-- `DELETE /projects/{id}` - Delete project
-- `POST /projects/{id}/documents/upload` - Upload documents
-- `POST /projects/{id}/process-embeddings` - Generate embeddings
-- `POST /projects/{id}/extract` - Extract requirements (long-running)
-- `POST /projects/{id}/diagrams/generate` - Generate diagrams
-- `POST /projects/{id}/proposal/generate` - Generate proposal
-- `POST /projects/{id}/chat` - Send chat message
-- `GET /projects/{id}/chat/history` - Get chat history
+Chat:
 
-### Important API Quirks
-- **Trailing Slash Required**: Use `POST /projects/` not `POST /projects`
-- **Text to File Conversion**: Backend only accepts file uploads, not raw text
-  ```typescript
-  const file = new File([text], 'requirements.txt', { type: 'text/plain' });
-  ```
-- **Long-Running Operations**: Extraction takes 30-60 seconds, show loading state
-- **Sequential Processing**: Must follow pipeline order: upload → embeddings → extract → diagrams → proposal
+- `GET /projects/{project_id}/chat`
+- `POST /projects/{project_id}/chat`
+- `DELETE /projects/{project_id}/chat`
 
-## 🎨 Styling
+## Important Implementation Notes
 
-### TailwindCSS 4
-The project uses TailwindCSS 4 with custom configuration:
-- Custom color palette
-- Responsive design utilities
-- Dark mode support (system preference)
-- Custom animations and transitions
+- Project creation uses `POST /projects/` with a trailing slash.
+- Raw pasted text is converted into a `File` before upload.
+- Extraction and diagram generation can take time, so loading states are expected.
+- Results are keyed and reset by project id to avoid data from one project appearing in another project.
+- The landing page uses decorative animation, but heavy canvas animation is paused when idle to reduce CPU usage.
+- `Risks & Open Questions` are app-only review content and are excluded from exports by design.
 
-### Component Patterns
-- Consistent spacing with Tailwind utilities
-- Reusable UI components in `src/components/ui/`
-- Responsive layouts with mobile-first approach
-- Accessible components with ARIA labels
+## Common Troubleshooting
 
-## 🐛 Troubleshooting
+### API requests fail
 
-### Common Issues
+Check `NEXT_PUBLIC_API_BASE_URL` in `.env.local`, then restart `npm run dev`.
 
-**1. API Connection Errors**
-```
-Error: Failed to fetch
-```
-**Solution**: Verify `NEXT_PUBLIC_API_BASE_URL` in `.env.local` and restart dev server.
+### User gets logged out
 
-**2. Authentication Errors**
-```
-401 Unauthorized
-```
-**Solution**: Token may be expired. Log out and log in again. Tokens expire after 24 hours.
+A `401` response clears local auth state. Sign in again.
 
-**3. Text Upload Not Working**
-**Solution**: Ensure text is being converted to File object before upload:
-```typescript
-const file = new File([text], 'requirements.txt', { type: 'text/plain' });
-```
+### Upload from text does not appear
 
-**4. Extraction Taking Too Long**
-**Solution**: Extraction is a long-running operation (30-60 seconds). Ensure loading state is displayed. Check backend logs if it exceeds 2 minutes.
+The frontend converts pasted text into `requirements.txt` before uploading. Check browser console and backend upload logs if the file is missing.
 
-**5. Diagrams Not Rendering**
-**Solution**: 
-- Ensure extraction completed successfully
-- Check browser console for Mermaid errors
-- Verify diagram content is valid Mermaid syntax
+### Diagrams stay loading or show stale data after switching projects
 
-**6. Chat Not Working**
-**Solution**: 
-- Ensure documents are uploaded
-- Verify embeddings are processed
-- Check that extraction is complete
-- Documents must be processed before chat is available
+The current implementation resets results by project id. If it still happens, verify the backend response for the selected project id and check network requests in DevTools.
 
-**7. Environment Variables Not Loading**
-**Solution**: 
-- Restart dev server after changing `.env.local`
-- Ensure variable starts with `NEXT_PUBLIC_` for client-side access
-- Clear `.next` cache: `rm -rf .next && npm run dev`
+### Mermaid diagram fails to render
 
-### Development Tips
+Check the generated Mermaid syntax in the diagram source panel. Invalid Mermaid content can prevent rendering.
 
-**Hot Reload Issues**
-```bash
-# Clear Next.js cache
-rm -rf .next
-npm run dev
-```
+### Chat is disabled
 
-**Type Errors**
-```bash
-# Regenerate TypeScript types
-npm run build
-```
+Chat requires uploaded documents and embeddings context. Run the processing pipeline first.
 
-**Styling Not Updating**
-```bash
-# Clear PostCSS cache
-rm -rf .next
-npm run dev
-```
+## Deployment
 
-## ⚠️ Known Limitations (Hackathon MVP)
+This frontend can be deployed on Vercel.
 
-### Security
-- JWT tokens stored in localStorage (not httpOnly cookies)
-- No token refresh mechanism
-- Basic error handling without retry logic
-
-### Features
-- No offline support
-- No real-time collaboration
-- No document versioning
-- No undo/redo functionality
-- Limited file format support
-- No batch operations
-
-### Performance
-- No pagination for large document lists
-- No lazy loading for chat history
-- No caching strategy for API responses
-- Large diagrams may impact performance
-
-### UX
-- No drag-and-drop reordering
-- No keyboard shortcuts
-- No customizable themes
-- Limited mobile optimization
-- No accessibility audit completed
-
-### Data
-- No data export beyond proposals
-- No backup/restore functionality
-- No data migration tools
-
-## 🚢 Deployment
-
-See [DEPLOYMENT.md](../DEPLOYMENT.md) for detailed deployment instructions.
-
-### Quick Deploy to Vercel
-
-1. Push code to GitHub
-2. Import project in Vercel
-3. Set environment variable:
+1. Import the GitHub repository in Vercel.
+2. Set the project root to `frontend` if deploying this folder separately.
+3. Add environment variable:
    - `NEXT_PUBLIC_API_BASE_URL=https://backend-hackaton-v2.vercel.app`
-4. Deploy
+4. Build command: `npm run build`
+5. Output is handled by Next.js/Vercel automatically.
 
-## 📝 Environment Variables
+## MVP Limitations
 
-| Variable | Description | Default | Required |
-|----------|-------------|---------|----------|
-| `NEXT_PUBLIC_API_BASE_URL` | Backend API URL | `https://backend-hackaton-v2.vercel.app` | Yes |
+- JWT is stored in `localStorage`.
+- No automated test suite yet.
+- No offline support or realtime collaboration.
+- Large Mermaid diagrams may still be heavy in older browsers.
+- Backend processing is long-running and currently handled with simple loading states.
 
-## 🤝 Contributing
+## Related Documentation
 
-This is a hackathon MVP project. For production use, consider:
-- Implementing httpOnly cookie authentication
-- Adding comprehensive error handling
-- Implementing retry logic for failed requests
-- Adding unit and integration tests
-- Improving accessibility (WCAG compliance)
-- Adding analytics and monitoring
-- Implementing proper state management (Redux/Zustand)
-- Adding WebSocket support for real-time updates
-
-## 📄 License
-
-MIT License - See LICENSE file for details
-
-## 🔗 Related Documentation
-
-- [Backend README](../backend/README.md)
 - [API Documentation](./API_DOCUMENTATION.md)
-- [Deployment Guide](../DEPLOYMENT.md)
 - [Project Root README](../README.md)
-
-## 📞 Support
-
-For issues and questions:
-1. Check the troubleshooting section above
-2. Review API documentation
-3. Check backend logs for API errors
-4. Verify environment variables are set correctly
-
----
-
-Built with ❤️ for IBM Hackathon 2026

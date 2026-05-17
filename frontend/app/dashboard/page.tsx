@@ -1,7 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { isAuthenticated, clearToken } from '@/lib/auth';
 import { Project } from '@/types/api';
 import { ProjectList } from '@/components/projects';
@@ -12,6 +14,7 @@ import api from '@/lib/api';
 
 export default function DashboardPage() {
   const router = useRouter();
+  const reduceMotion = useReducedMotion();
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [projectListRefreshKey, setProjectListRefreshKey] = useState(0);
@@ -28,6 +31,11 @@ export default function DashboardPage() {
   };
 
   const handleSelectProject = (project: Project) => {
+    if (selectedProject?.id === project.id) {
+      setIsSidebarOpen(false);
+      return;
+    }
+
     setSelectedProject(project);
     setIsSidebarOpen(false);
   };
@@ -66,11 +74,13 @@ export default function DashboardPage() {
                 </svg>
               </button>
 
-              <BrandLogo
-                size="md"
-                className="max-w-[250px] sm:max-w-none"
-                imageClassName="h-10 w-40"
-              />
+              <Link href="/" className="inline-flex min-w-0 items-center rounded-xl focus:outline-none focus:ring-2 focus:ring-accent/30">
+                <BrandLogo
+                  size="md"
+                  className="max-w-[250px] sm:max-w-none"
+                  imageClassName="h-10 w-40"
+                />
+              </Link>
             </div>
             <Button
               variant="ghost"
@@ -114,24 +124,42 @@ export default function DashboardPage() {
 
         {/* Main Area */}
         <main className="flex-1 overflow-hidden">
-          {selectedProject ? (
-            <WorkspaceLayout
-              key={selectedProject.id}
-              project={selectedProject}
-              onProjectDeleted={handleProjectDeleted}
-              onProjectUpdated={handleProjectUpdated}
-            />
-          ) : (
-            <div className="flex h-full items-center justify-center p-6">
-              <div className="w-full max-w-xl">
-                <EmptyState
-                  icon={<FolderIcon />}
-                  title="No project selected"
-                  description="Choose a workspace or create one to generate your first plan."
+          <AnimatePresence mode="wait" initial={false}>
+            {selectedProject ? (
+              <motion.div
+                key={`workspace-${selectedProject.id}`}
+                className="h-full"
+                initial={reduceMotion ? false : { opacity: 0, x: 18, scale: 0.995 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
+                exit={reduceMotion ? undefined : { opacity: 0, x: -14, scale: 0.995 }}
+                transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <WorkspaceLayout
+                  key={selectedProject.id}
+                  project={selectedProject}
+                  onProjectDeleted={handleProjectDeleted}
+                  onProjectUpdated={handleProjectUpdated}
                 />
-              </div>
-            </div>
-          )}
+              </motion.div>
+            ) : (
+              <motion.div
+                key="workspace-empty"
+                className="flex h-full items-center justify-center p-6"
+                initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={reduceMotion ? undefined : { opacity: 0, y: -8 }}
+                transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <div className="w-full max-w-xl">
+                  <EmptyState
+                    icon={<FolderIcon />}
+                    title="No project selected"
+                    description="Choose a workspace or create one to generate your first plan."
+                  />
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </main>
       </div>
     </div>

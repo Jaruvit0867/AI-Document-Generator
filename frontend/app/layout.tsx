@@ -3,6 +3,7 @@ import { Outfit } from "next/font/google";
 import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { RouteTransition } from "@/components/transitions";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -32,7 +33,9 @@ export default function RootLayout({
       className={`${outfit.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <RouteTransition>{children}</RouteTransition>
+        </AuthProvider>
       </body>
     </html>
   );

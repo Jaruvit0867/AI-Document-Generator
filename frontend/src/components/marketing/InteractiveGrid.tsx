@@ -14,8 +14,11 @@ export const InteractiveGrid = () => {
     if (!ctx) return;
     const context = ctx;
 
+    frameRef.current = 0;
+
     let width = 0;
     let height = 0;
+    let resizeFrame = 0;
     const gap = 44;
     const dotRadius = 0.9;
     const mouseRadius = 150;
@@ -33,26 +36,49 @@ export const InteractiveGrid = () => {
 
     // Wave animation state
     let time = 0;
+    let lastFrameAt = 0;
     let isVisible = !document.hidden;
+    const ambientFrameMs = 1000 / 28;
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const resize = () => {
       const parent = canvas.parentElement;
       if (!parent) return;
+
       const rect = parent.getBoundingClientRect();
-      const dpr = window.devicePixelRatio || 1;
-      width = rect.width;
-      height = rect.height;
-      canvas.width = width * dpr;
-      canvas.height = height * dpr;
+      const nextWidth = Math.round(rect.width);
+      const nextHeight = Math.round(rect.height);
+
+      if (nextWidth <= 0 || nextHeight <= 0) {
+        requestResize();
+        return;
+      }
+
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = nextWidth;
+      height = nextHeight;
+      canvas.width = Math.ceil(width * dpr);
+      canvas.height = Math.ceil(height * dpr);
       canvas.style.width = `${width}px`;
       canvas.style.height = `${height}px`;
       context.setTransform(dpr, 0, 0, dpr, 0, 0);
       requestDraw();
     };
 
-    resize();
-    window.addEventListener('resize', resize);
+    function requestResize() {
+      if (resizeFrame) return;
+      resizeFrame = requestAnimationFrame(() => {
+        resizeFrame = 0;
+        resize();
+      });
+    }
+
+    const parent = canvas.parentElement;
+    const resizeObserver = parent ? new ResizeObserver(requestResize) : null;
+
+    requestResize();
+    window.addEventListener('resize', requestResize);
+    resizeObserver?.observe(parent as Element);
 
     const isOverContent = (target: EventTarget | null): boolean => {
       if (!target || !(target instanceof HTMLElement)) return false;
@@ -116,12 +142,30 @@ export const InteractiveGrid = () => {
       frameRef.current = requestAnimationFrame(draw);
     }
 
-    function draw() {
+    function draw(timestamp = performance.now()) {
       frameRef.current = 0;
+
+      if (width <= 0 || height <= 0) {
+        requestResize();
+        return;
+      }
+
+      const isInteractionActive = mouseActive || mouseFade > 0.006 || trail.length > 0;
+
+      if (
+        !prefersReducedMotion &&
+        !isInteractionActive &&
+        timestamp - lastFrameAt < ambientFrameMs
+      ) {
+        requestDraw();
+        return;
+      }
+
+      lastFrameAt = timestamp;
       context.clearRect(0, 0, width, height);
 
-      if (!prefersReducedMotion && (mouseActive || mouseFade > 0.006 || trail.length > 0)) {
-        time += 0.012;
+      if (!prefersReducedMotion) {
+        time += isInteractionActive ? 0.012 : 0.006;
       }
 
       // Smoothly follow mouse
@@ -252,8 +296,7 @@ export const InteractiveGrid = () => {
         context.fill();
       }
 
-      const shouldContinue =
-        isVisible && !prefersReducedMotion && (mouseActive || mouseFade > 0.006 || trail.length > 0);
+      const shouldContinue = isVisible && !prefersReducedMotion;
 
       if (shouldContinue) {
         requestDraw();
@@ -263,13 +306,19 @@ export const InteractiveGrid = () => {
     requestDraw();
 
     return () => {
-      window.removeEventListener('resize', resize);
+      window.removeEventListener('resize', requestResize);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('mouseleave', handleLeave);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
+      resizeObserver?.disconnect();
+      if (resizeFrame) {
+        cancelAnimationFrame(resizeFrame);
+        resizeFrame = 0;
+      }
       if (frameRef.current) {
         cancelAnimationFrame(frameRef.current);
+        frameRef.current = 0;
       }
     };
   }, []);
