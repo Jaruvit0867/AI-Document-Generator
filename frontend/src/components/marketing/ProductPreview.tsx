@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, type PointerEvent } from 'react';
-import { useMotionValue, useReducedMotion, useSpring, useTransform } from 'framer-motion';
+import { useInView, useMotionValue, useReducedMotion, useSpring, useTransform } from 'framer-motion';
 import { BrandLogo } from '@/components/brand/BrandLogo';
 import { motion } from './Motion';
 
@@ -43,27 +43,34 @@ const navIcons = [
 const FloatingDocument = ({
   badgeClassName,
   delay,
+  isActive,
   label,
   positionClassName,
+  reduceMotion,
 }: {
   badgeClassName: string;
   delay: number;
+  isActive: boolean;
   label: string;
   positionClassName: string;
+  reduceMotion: boolean;
 }) => (
   <motion.div
     initial={{ opacity: 0, x: -18, y: 8 }}
-    animate={{ opacity: 1, x: 0, y: [0, -8, 0] }}
+    animate={{ opacity: 1, x: 0, y: isActive && !reduceMotion ? [0, -8, 0] : 0 }}
     transition={{
       opacity: { delay, duration: 0.42, ease: 'easeOut' },
       x: { delay, duration: 0.52, ease: [0.22, 1, 0.36, 1] },
-      y: {
-        delay: delay + 0.28,
-        duration: 2.8,
-        ease: 'easeInOut',
-        repeat: Infinity,
-        repeatType: 'loop',
-      },
+      y:
+        isActive && !reduceMotion
+          ? {
+              delay: delay + 0.28,
+              duration: 2.8,
+              ease: 'easeInOut',
+              repeat: Infinity,
+              repeatType: 'loop',
+            }
+          : { duration: 0.28, ease: 'easeOut' },
     }}
     className={`absolute -left-6 hidden h-20 w-16 rounded-2xl border border-white/70 bg-white/90 shadow-xl backdrop-blur-md lg:block ${positionClassName}`}
   >
@@ -75,7 +82,13 @@ const FloatingDocument = ({
   </motion.div>
 );
 
-const ConnectorLines = ({ reduceMotion }: { reduceMotion: boolean }) => (
+const ConnectorLines = ({
+  isActive,
+  reduceMotion,
+}: {
+  isActive: boolean;
+  reduceMotion: boolean;
+}) => (
   <svg className="pointer-events-none absolute -left-8 top-16 hidden h-72 w-36 lg:block" viewBox="0 0 160 320" fill="none" aria-hidden="true">
     <defs>
       <linearGradient id="connectorFlow" x1="24" y1="0" x2="130" y2="0" gradientUnits="userSpaceOnUse">
@@ -83,13 +96,6 @@ const ConnectorLines = ({ reduceMotion }: { reduceMotion: boolean }) => (
         <stop offset="0.55" stopColor="#2563EB" stopOpacity="0.95" />
         <stop offset="1" stopColor="#6D7CFF" stopOpacity="0.95" />
       </linearGradient>
-      <filter id="connectorGlow" x="-20%" y="-40%" width="140%" height="180%">
-        <feGaussianBlur stdDeviation="2.5" result="blur" />
-        <feMerge>
-          <feMergeNode in="blur" />
-          <feMergeNode in="SourceGraphic" />
-        </feMerge>
-      </filter>
     </defs>
 
     {connectorLines.map((line) => (
@@ -108,23 +114,25 @@ const ConnectorLines = ({ reduceMotion }: { reduceMotion: boolean }) => (
           strokeWidth="3.5"
           strokeDasharray="10 10"
           strokeLinecap="round"
-          filter="url(#connectorGlow)"
-          initial={{ opacity: 0, pathLength: reduceMotion ? 1 : 0 }}
+          initial={false}
           animate={
-            reduceMotion
-              ? { opacity: 0.75, pathLength: 1 }
-              : {
-                  opacity: [0.4, 1, 0.4],
-                  pathLength: [0.35, 1, 0.35],
+            isActive && !reduceMotion
+              ? {
+                  opacity: [0.45, 0.95, 0.45],
                   strokeDashoffset: [0, -40],
                   y: [0, -8, 0],
+                }
+              : {
+                  opacity: 0.68,
+                  strokeDashoffset: 0,
+                  y: 0,
                 }
           }
           transition={{
             delay: line.delay,
             duration: 4,
             ease: [0.22, 1, 0.36, 1],
-            repeat: reduceMotion ? 0 : Infinity,
+            repeat: isActive && !reduceMotion ? Infinity : 0,
             repeatType: 'mirror',
           }}
         />
@@ -135,19 +143,23 @@ const ConnectorLines = ({ reduceMotion }: { reduceMotion: boolean }) => (
           fill="#2563EB"
           initial={{ opacity: 0, scale: 0.7 }}
           animate={
-            reduceMotion
-              ? { opacity: 0.7, scale: 1 }
-              : {
-                  opacity: [0, 0.85, 0],
-                  scale: [0.7, 1.35, 0.7],
+            isActive && !reduceMotion
+              ? {
+                  opacity: [0.12, 0.72, 0.12],
+                  scale: [0.85, 1.22, 0.85],
                   y: [0, -8, 0],
+                }
+              : {
+                  opacity: 0.58,
+                  scale: 1,
+                  y: 0,
                 }
           }
           transition={{
             delay: line.delay + 0.28,
             duration: 4,
             ease: [0.22, 1, 0.36, 1],
-            repeat: reduceMotion ? 0 : Infinity,
+            repeat: isActive && !reduceMotion ? Infinity : 0,
             repeatType: 'mirror',
           }}
         />
@@ -157,9 +169,12 @@ const ConnectorLines = ({ reduceMotion }: { reduceMotion: boolean }) => (
 );
 
 export const ProductPreview = () => {
+  const rootRef = useRef<HTMLDivElement>(null);
   const previewRef = useRef<HTMLDivElement>(null);
   const reduceMotion = useReducedMotion();
   const shouldReduceMotion = Boolean(reduceMotion);
+  const isInView = useInView(rootRef, { amount: 0.2, margin: '160px 0px' });
+  const shouldAnimateDecor = isInView && !shouldReduceMotion;
   const pointerX = useMotionValue(0);
   const pointerY = useMotionValue(0);
   const scaleTarget = useMotionValue(1);
@@ -189,14 +204,19 @@ export const ProductPreview = () => {
   };
 
   return (
-    <div className="relative mx-auto w-full max-w-[360px] overflow-visible sm:max-w-5xl">
+    <div ref={rootRef} className="relative mx-auto w-full max-w-[360px] overflow-visible sm:max-w-5xl">
       <div className="pointer-events-none absolute -inset-10 rounded-[3rem] bg-[radial-gradient(circle_at_68%_30%,rgba(191,219,254,0.9),transparent_46%),radial-gradient(circle_at_32%_78%,rgba(59,130,246,0.24),transparent_36%)] blur-2xl" />
       <div className="pointer-events-none absolute -right-12 top-0 hidden h-[28rem] w-[28rem] rounded-full bg-blue-100/80 lg:block" />
 
-      <ConnectorLines reduceMotion={shouldReduceMotion} />
+      <ConnectorLines isActive={shouldAnimateDecor} reduceMotion={shouldReduceMotion} />
 
       {documentTiles.map((doc) => (
-        <FloatingDocument key={doc.label} {...doc} />
+        <FloatingDocument
+          key={doc.label}
+          {...doc}
+          isActive={shouldAnimateDecor}
+          reduceMotion={shouldReduceMotion}
+        />
       ))}
 
       <motion.div

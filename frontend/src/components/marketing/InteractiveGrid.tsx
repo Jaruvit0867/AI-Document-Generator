@@ -12,6 +12,7 @@ export const InteractiveGrid = () => {
 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
+    const context = ctx;
 
     let width = 0;
     let height = 0;
@@ -32,6 +33,8 @@ export const InteractiveGrid = () => {
 
     // Wave animation state
     let time = 0;
+    let isVisible = !document.hidden;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const resize = () => {
       const parent = canvas.parentElement;
@@ -44,7 +47,8 @@ export const InteractiveGrid = () => {
       canvas.height = height * dpr;
       canvas.style.width = `${width}px`;
       canvas.style.height = `${height}px`;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      context.setTransform(dpr, 0, 0, dpr, 0, 0);
+      requestDraw();
     };
 
     resize();
@@ -69,6 +73,8 @@ export const InteractiveGrid = () => {
         mouse.y = y;
         mouseActive = true;
       }
+
+      requestDraw();
     };
 
     const handleTouchMove = (e: TouchEvent) => {
@@ -77,21 +83,46 @@ export const InteractiveGrid = () => {
       mouse.x = touch.clientX - rect.left;
       mouse.y = touch.clientY - rect.top;
       mouseActive = true;
+      requestDraw();
     };
 
     const handleLeave = () => {
       mouseActive = false;
+      requestDraw();
+    };
+
+    const handleVisibilityChange = () => {
+      isVisible = !document.hidden;
+
+      if (isVisible) {
+        requestDraw();
+      } else if (frameRef.current) {
+        cancelAnimationFrame(frameRef.current);
+        frameRef.current = 0;
+      }
     };
 
     window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('touchmove', handleTouchMove);
+    window.addEventListener('touchmove', handleTouchMove, { passive: true });
     window.addEventListener('mouseleave', handleLeave);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 
-    const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+    function lerp(a: number, b: number, t: number) {
+      return a + (b - a) * t;
+    }
 
-    const draw = () => {
-      ctx.clearRect(0, 0, width, height);
-      time += 0.012;
+    function requestDraw() {
+      if (!isVisible || frameRef.current) return;
+      frameRef.current = requestAnimationFrame(draw);
+    }
+
+    function draw() {
+      frameRef.current = 0;
+      context.clearRect(0, 0, width, height);
+
+      if (!prefersReducedMotion && (mouseActive || mouseFade > 0.006 || trail.length > 0)) {
+        time += 0.012;
+      }
 
       // Smoothly follow mouse
       const smoothing = 0.12;
@@ -137,14 +168,14 @@ export const InteractiveGrid = () => {
             const ab = Math.round(237 * (1 - hueT) + 248 * hueT);
 
             const glowR = gap * 3.5;
-            const grad = ctx.createRadialGradient(ax, ay, 0, ax, ay, glowR);
+            const grad = context.createRadialGradient(ax, ay, 0, ax, ay, glowR);
             grad.addColorStop(0, `rgba(${ar}, ${ag}, ${ab}, ${intensity * 0.06})`);
             grad.addColorStop(0.5, `rgba(${ar}, ${ag}, ${ab}, ${intensity * 0.025})`);
             grad.addColorStop(1, `rgba(${ar}, ${ag}, ${ab}, 0)`);
-            ctx.fillStyle = grad;
-            ctx.beginPath();
-            ctx.arc(ax, ay, glowR, 0, Math.PI * 2);
-            ctx.fill();
+            context.fillStyle = grad;
+            context.beginPath();
+            context.arc(ax, ay, glowR, 0, Math.PI * 2);
+            context.fill();
           }
         }
       }
@@ -201,37 +232,45 @@ export const InteractiveGrid = () => {
             }
           }
 
-          ctx.beginPath();
-          ctx.arc(x, y, r, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(37, 99, 235, ${alpha})`;
-          ctx.fill();
+          context.beginPath();
+          context.arc(x, y, r, 0, Math.PI * 2);
+          context.fillStyle = `rgba(37, 99, 235, ${alpha})`;
+          context.fill();
         }
       }
 
       // Soft radial glow at mouse center
       if (nearby.length > 0 && mouseFade > 0.05) {
         const glowRadius = mouseRadius * 0.7;
-        const glowGrad = ctx.createRadialGradient(mx, my, 0, mx, my, glowRadius);
+        const glowGrad = context.createRadialGradient(mx, my, 0, mx, my, glowRadius);
         glowGrad.addColorStop(0, `rgba(37, 99, 235, ${0.035 * mouseFade})`);
         glowGrad.addColorStop(0.5, `rgba(37, 99, 235, ${0.015 * mouseFade})`);
         glowGrad.addColorStop(1, 'rgba(37, 99, 235, 0)');
-        ctx.fillStyle = glowGrad;
-        ctx.beginPath();
-        ctx.arc(mx, my, glowRadius, 0, Math.PI * 2);
-        ctx.fill();
+        context.fillStyle = glowGrad;
+        context.beginPath();
+        context.arc(mx, my, glowRadius, 0, Math.PI * 2);
+        context.fill();
       }
 
-      frameRef.current = requestAnimationFrame(draw);
-    };
+      const shouldContinue =
+        isVisible && !prefersReducedMotion && (mouseActive || mouseFade > 0.006 || trail.length > 0);
 
-    frameRef.current = requestAnimationFrame(draw);
+      if (shouldContinue) {
+        requestDraw();
+      }
+    }
+
+    requestDraw();
 
     return () => {
       window.removeEventListener('resize', resize);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('mouseleave', handleLeave);
-      cancelAnimationFrame(frameRef.current);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      if (frameRef.current) {
+        cancelAnimationFrame(frameRef.current);
+      }
     };
   }, []);
 
