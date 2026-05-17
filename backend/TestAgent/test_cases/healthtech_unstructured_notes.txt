@@ -1,0 +1,319 @@
+hey team - notes from the fitness/wellness app call. client is super enthusiastic but also all over the place lol
+
+CLIENT: FitLife Pro
+DOMAIN: HealthTech / Fitness & Wellness
+FUNDING: $2M seed (from angel investors, mostly fitness influencers)
+FOUNDERS: 2 personal trainers + 1 nutritionist + 1 "tech guy" (has an instagram account with fitness tips, not sure about actual tech skills)
+
+THE PITCH:
+they want to build an "all-in-one fitness and wellness platform" that combines workout tracking, meal planning, habit tracking, and social features. basically they want to compete with MyFitnessPal, Strava, and Peloton all at once which seems... ambitious
+
+one founder kept saying "we're gonna be the super app for fitness" and i had to bite my tongue
+
+WHAT THEY WANT:
+
+WORKOUT FEATURES:
+- workout library (videos of exercises)
+- custom workout builder
+- workout tracking (sets, reps, weight)
+- progress photos
+- body measurements tracking
+- strength progress charts
+- cardio tracking (running, cycling, swimming)
+- GPS tracking for outdoor activities
+- integration with fitness trackers (fitbit, apple watch, garmin)
+- workout reminders
+- rest day recommendations
+- injury prevention tips
+- form check using AI??? (they saw this somewhere and now want it)
+
+the AI form check thing is wild. they want users to record themselves doing exercises and AI tells them if their form is correct. i explained that's computer vision + ML which is super complex. they said "can't we just use chatgpt?" lol no
+
+NUTRITION FEATURES:
+- calorie tracking
+- macro tracking (protein, carbs, fats)
+- meal planning
+- recipe database
+- barcode scanner for food
+- restaurant menu database
+- water intake tracking
+- supplement tracking
+- meal prep planning
+- grocery list generator
+- nutrition goals based on fitness goals
+- integration with food delivery apps???
+
+they want to partner with meal prep companies and get commission. seems like scope creep but whatever
+
+SOCIAL FEATURES:
+- follow friends
+- share workouts
+- share progress photos
+- challenges (30-day squat challenge, etc)
+- leaderboards
+- workout buddies matching
+- group challenges
+- achievement badges
+- social feed (like instagram but for fitness)
+- comments and likes
+- direct messaging
+- virtual high-fives??? (yes really)
+
+one founder is REALLY into the social aspect. kept saying "community is everything" and "people need accountability"
+
+COACHING FEATURES:
+- connect with personal trainers
+- video coaching sessions
+- messaging with coaches
+- custom workout plans from coaches
+- nutrition coaching
+- progress check-ins
+- coaches can charge for services (marketplace model)
+
+so it's also a marketplace? this is getting complicated
+
+GAMIFICATION:
+- points for completing workouts
+- levels and achievements
+- streaks
+- challenges with prizes
+- virtual trophies
+- compete with friends
+- fitness challenges with brands (sponsored)
+
+they're VERY into gamification. showed me a 10-slide deck just on gamification ideas
+
+WEARABLE INTEGRATION:
+- apple watch
+- fitbit
+- garmin
+- whoop
+- oura ring
+- polar
+- samsung galaxy watch
+- google fit
+- apple health
+- strava
+
+basically every wearable ever made. i asked if we really need ALL of them for MVP. they said "yes, users expect it"
+
+PREMIUM FEATURES:
+they want freemium model
+- free: basic tracking
+- premium ($15/month): advanced analytics, custom plans, coaching access, ad-free
+- coach tier ($50/month): for trainers to use the platform professionally
+
+TECHNICAL CHALLENGES I SEE:
+
+1. VIDEO HOSTING: they want thousands of workout videos. that's expensive to host and stream
+2. GPS TRACKING: real-time GPS for runs/rides is battery intensive
+3. WEARABLE APIS: each wearable has different API, some are terrible
+4. FOOD DATABASE: need comprehensive food database (maybe use USDA or third-party)
+5. AI FORM CHECK: this alone could be a whole company. super complex
+6. SOCIAL FEED: need content moderation, reporting, etc
+7. VIDEO COACHING: need video infrastructure like zoom
+8. REAL-TIME FEATURES: leaderboards, challenges need real-time updates
+
+QUESTIONS I ASKED:
+
+"how do you handle user-generated content moderation?"
+- they hadn't thought about it. need to figure out
+
+"what about liability if someone gets injured following a workout?"
+- "we'll have disclaimers" (classic startup answer)
+
+"how do you verify coaches are qualified?"
+- "we'll check their certifications" (need a whole verification system)
+
+"what if GPS tracking drains battery too fast?"
+- "can't you optimize it?" (yes but there are limits)
+
+"how do you handle HIPAA if users share health data?"
+- blank stares. they didn't know about HIPAA
+
+explained that if they're storing health data, they might need HIPAA compliance. they were shocked. "but we're just a fitness app!" yeah but you're tracking health metrics, weight, potentially medical conditions...
+
+REVENUE MODEL:
+- freemium subscriptions ($15/month premium)
+- coach marketplace (20% commission)
+- sponsored challenges (brands pay to sponsor)
+- affiliate commissions (supplements, equipment)
+- ads in free tier
+- white-label for gyms and corporate wellness
+
+they think they can make $10M in year 1. i'm skeptical
+
+COMPETITION:
+- myfitnesspal (nutrition tracking)
+- strava (running/cycling)
+- peloton (workouts and community)
+- nike training club (free workouts)
+- fitbit app (wearable integration)
+- strong (workout tracking)
+- lose it (calorie tracking)
+- noom (behavior change)
+
+their differentiator: "we do everything in one app" which is both their strength and weakness
+
+TECH STACK IDEAS:
+- react native for mobile (they want iOS and Android)
+- node.js backend
+- postgresql for user data
+- mongodb for workout/meal data
+- redis for real-time features
+- AWS for hosting
+- cloudfront for video CDN
+- s3 for video storage
+- elasticsearch for food search
+- websockets for real-time features
+- twilio for video coaching
+- stripe for payments
+
+TIMELINE:
+they want MVP in 4 months (september 2026)
+i said 6-8 months is more realistic
+they said "we need to launch before new year's resolution season" (january)
+so they're willing to cut features to hit timeline
+
+MVP FEATURES (what we agreed):
+- workout tracking (manual entry, no videos yet)
+- basic nutrition tracking
+- progress tracking (weight, measurements, photos)
+- social feed (basic)
+- wearable integration (apple health and google fit only for MVP)
+- user profiles
+- premium subscription
+
+PHASE 2:
+- workout video library
+- AI form check (if we can figure it out)
+- GPS tracking
+- meal planning
+- coaching marketplace
+- challenges and gamification
+- more wearable integrations
+
+BUDGET:
+$350k for development
+seems tight for everything they want
+they're also talking to 2 other dev shops
+
+TEAM SIZE:
+- 2 mobile developers
+- 2 backend developers
+- 1 devops
+- 1 designer
+- 1 QA
+- 1 PM
+
+8 people for 6 months
+
+CONCERNS:
+
+1. scope is HUGE - they want to build 5 apps in one
+2. wearable APIs are notoriously difficult
+3. video hosting is expensive
+4. AI form check might not be feasible
+5. HIPAA compliance might be needed
+6. liability for injuries
+7. content moderation for social features
+8. coach verification and quality control
+9. food database accuracy
+10. competition is fierce
+
+OPPORTUNITIES:
+
+1. fitness market is huge and growing
+2. people are willing to pay for fitness apps
+3. social features could drive engagement
+4. coach marketplace could be lucrative
+5. corporate wellness is a big market
+6. they have good industry connections (fitness influencers)
+
+RANDOM NOTES:
+- one founder is a bodybuilder with 500k instagram followers (could help with marketing)
+- another founder is a registered dietitian (good for nutrition credibility)
+- they want to launch with 50 coaches at launch
+- planning to do influencer marketing heavily
+- want to integrate with spotify for workout music
+- mentioned something about VR workouts??? (please no)
+- they're very focused on "building community"
+- want dark mode (of course)
+- want to support multiple languages eventually
+- concerned about app store approval (fitness apps sometimes get rejected)
+- want to track "everything" - sleep, stress, mood, energy levels
+- mentioned blockchain for achievement NFTs (i hope they were joking)
+
+USER PERSONAS THEY DESCRIBED:
+1. gym bro who wants to track lifts
+2. runner training for marathon
+3. person trying to lose weight
+4. busy professional who wants quick workouts
+5. personal trainer who wants to manage clients
+
+that's like 5 different apps lol
+
+MONETIZATION DETAILS:
+- free tier: basic tracking, ads
+- premium ($15/month): no ads, advanced features, unlimited data
+- coach tier ($50/month): for trainers, client management tools
+- lifetime premium: $299 (one-time)
+- family plan: $25/month for up to 5 people
+
+MARKETING STRATEGY:
+- influencer partnerships
+- app store optimization
+- content marketing (blog, youtube)
+- paid ads (facebook, instagram, google)
+- partnerships with gyms
+- corporate wellness programs
+- referral program (free month for referrals)
+
+LEGAL/COMPLIANCE:
+- terms of service
+- privacy policy
+- HIPAA compliance??? (need to research)
+- liability waivers
+- coach agreements
+- content licensing for workout videos
+- music licensing if they add music features
+- GDPR compliance for EU users
+
+RISKS:
+- market is crowded
+- user acquisition cost might be high
+- retention is hard (people quit fitness apps)
+- wearable integrations might break
+- liability if someone gets hurt
+- coaches might provide bad advice
+- content moderation challenges
+- technical complexity
+- budget might not be enough
+
+NEXT STEPS:
+- need to scope down to realistic MVP
+- research HIPAA requirements
+- get legal opinion on liability
+- create detailed requirements doc
+- technical architecture proposal
+- timeline with phases
+- pricing proposal
+- they want proposal by friday (3 days!)
+
+MY THOUGHTS:
+interesting idea but they're trying to do too much. need to focus on one thing and do it really well. the social features could be differentiating if done right. wearable integration is table stakes. AI form check is probably not feasible for MVP.
+
+biggest concern: they don't seem to understand the technical complexity. they think everything is easy because "there's an API for that"
+
+should we take this? pros: good funding, passionate founders, big market. cons: unrealistic expectations, tight timeline, huge scope, competitive market
+
+need to have a reality check conversation with them about scope and timeline
+
+also need to figure out if we have anyone with fitness app experience on the team. wearable APIs are tricky
+
+- alex
+
+p.s. they kept using fitness buzzwords like "functional fitness" and "biohacking" which made me think they spend too much time on fitness instagram
+p.p.s. one founder suggested adding a dating feature for "fitness singles" and i had to explain that's a whole different app
+p.p.p.s. they want to call the AI form check feature "FormAI" which is actually kinda clever
+p.p.p.s. they're planning a launch party at a gym with fitness influencers which could be good for PR

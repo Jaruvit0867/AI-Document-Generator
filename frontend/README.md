@@ -282,4 +282,5 @@ This frontend can be deployed on Vercel.
 ## Related Documentation
 
 - [API Documentation](./API_DOCUMENTATION.md)
+- [Backend Source Code](https://gitlab.com/jason11123/backend-hackaton-v2)
 - [Project Root README](../README.md)

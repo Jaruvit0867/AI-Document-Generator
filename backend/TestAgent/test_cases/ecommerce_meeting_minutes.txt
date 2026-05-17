@@ -1,0 +1,327 @@
+MEETING MINUTES - URBANCART MARKETPLACE PLATFORM KICKOFF
+
+Date: May 14, 2026
+Time: 10:00 AM - 12:30 PM PST
+Location: Conference Room A + Zoom
+Meeting Type: Project Kickoff
+Project: UrbanCart - Multi-Vendor Marketplace Platform
+
+ATTENDEES:
+Present:
+- Alex Thompson (CEO & Founder)
+- Maria Garcia (CTO)
+- James Wilson (Product Manager)
+- Rachel Kim (Lead Designer)
+- Tom Chen (Backend Lead)
+- Lisa Anderson (Frontend Lead)
+- Kevin Brown (DevOps Engineer)
+- Sophie Martinez (Business Analyst)
+
+Remote:
+- David Lee (Marketing Director)
+- Emma White (Customer Success Manager)
+
+Absent:
+- John Davis (CFO) - on business trip
+
+═══════════════════════════════════════════════════════════════════
+
+AGENDA:
+1. Project vision and business goals
+2. Market analysis and competitive landscape
+3. Core features discussion
+4. Technical architecture overview
+5. Timeline and milestones
+6. Budget and resources
+7. Risks and concerns
+8. Next steps and action items
+
+═══════════════════════════════════════════════════════════════════
+
+MEETING NOTES:
+
+Alex opened the meeting by sharing the vision for UrbanCart. He explained that we're building a multi-vendor marketplace similar to Etsy but focused on urban lifestyle products - handmade goods, local artisan products, vintage items, and sustainable products. The goal is to connect local sellers with conscious consumers.
+
+KEY BUSINESS OBJECTIVES (from Alex's presentation):
+- Launch MVP in 6 months (November 2026)
+- Onboard 500 sellers in first 3 months post-launch
+- Achieve $1M GMV (Gross Merchandise Value) in first year
+- Take 15% commission on each sale (10% platform fee + 5% payment processing)
+- Target market: Urban millennials and Gen Z (25-40 years old)
+- Focus cities: San Francisco, Portland, Austin, Brooklyn, Seattle
+
+Maria presented market research findings. She mentioned that Etsy has 7.5 million active sellers but is becoming too crowded. There's an opportunity for a curated, local-focused marketplace. She showed data that 73% of millennials prefer buying from small businesses and 68% are willing to pay more for sustainable products.
+
+COMPETITIVE ANALYSIS (Maria's notes):
+- Etsy: Too broad, not local-focused, high fees (6.5% + payment processing)
+- Amazon Handmade: Lacks community feel, corporate image
+- Facebook Marketplace: No curation, trust issues
+- Local craft fairs: Limited reach, seasonal
+
+Our differentiator: Curated local marketplace with strong community features and seller support.
+
+James led the discussion on core features. There was a lot of back and forth on what should be in MVP vs Phase 2.
+
+MUST-HAVE FEATURES FOR MVP (agreed after discussion):
+
+Seller Side:
+1. Seller registration with verification process (business license, tax ID)
+2. Shop creation with customizable storefront
+3. Product listing with multiple photos (up to 10 per product)
+4. Inventory management
+5. Order management dashboard
+6. Shipping label generation (integration with ShipStation)
+7. Sales analytics (basic - revenue, orders, top products)
+8. Payout management (weekly payouts via Stripe Connect)
+9. Messaging with customers
+10. Review and rating system
+
+Buyer Side:
+1. Browse products by category and location
+2. Search with filters (price, location, category, seller rating)
+3. Product detail pages with seller info
+4. Shopping cart
+5. Guest checkout and registered user checkout
+6. Multiple payment methods (credit card, PayPal, Apple Pay)
+7. Order tracking
+8. Review and rating system
+9. Wishlist/favorites
+10. Messaging with sellers
+11. Order history
+
+Platform/Admin:
+1. Seller approval workflow
+2. Content moderation tools
+3. Dispute resolution system
+4. Analytics dashboard
+5. Commission tracking and reporting
+
+Rachel showed some initial wireframes. Everyone loved the clean, modern design. She emphasized mobile-first approach since 65% of Etsy's traffic is mobile. She proposed using a card-based layout for product browsing.
+
+Tom raised concerns about the timeline. He said 6 months is tight for a marketplace platform. Maria agreed but said we can use existing solutions for some components:
+- Stripe Connect for payments and payouts
+- ShipStation for shipping
+- Algolia for search
+- SendGrid for emails
+- Twilio for SMS notifications
+
+TECHNICAL STACK DISCUSSION:
+
+Frontend (Lisa's proposal):
+- React with Next.js for SEO benefits
+- TypeScript for type safety
+- Tailwind CSS for styling
+- Redux for state management
+- React Query for API calls
+
+Backend (Tom's proposal):
+- Node.js with Express
+- PostgreSQL for main database
+- Redis for caching and sessions
+- Elasticsearch for product search (Tom suggested Algolia instead for faster implementation)
+- AWS S3 for image storage
+- CloudFront CDN for image delivery
+
+Kevin talked about infrastructure:
+- Deploy on AWS using ECS
+- Use RDS for PostgreSQL
+- ElastiCache for Redis
+- CloudWatch for monitoring
+- GitHub Actions for CI/CD
+
+PAYMENT AND COMMISSION STRUCTURE:
+
+This generated a lot of discussion. Alex wants 15% total commission:
+- 10% platform fee to UrbanCart
+- 5% payment processing (passed through from Stripe)
+
+Maria pointed out that Stripe Connect charges 2.9% + 30¢, not 5%. After discussion, they agreed:
+- 12% platform fee to UrbanCart
+- Stripe fees (2.9% + 30¢) passed through to seller
+- Sellers receive 85.1% of sale price (minus Stripe fees)
+
+Tom asked about handling refunds and chargebacks. Sophie said we need a clear refund policy:
+- Buyers can request refund within 14 days
+- Sellers must respond within 48 hours
+- If dispute, platform mediates
+- Chargebacks handled by Stripe but seller is responsible
+
+SELLER VERIFICATION PROCESS:
+
+Rachel asked how we verify sellers. Alex said we want quality over quantity:
+1. Application form with business details
+2. Require business license or tax ID
+3. Manual review by our team (Sophie will handle initially)
+4. Phone verification
+5. First 10 products must be approved before shop goes live
+6. Ongoing monitoring for policy violations
+
+Sophie mentioned this could be a bottleneck. Alex agreed to hire 2 more people for seller operations after launch.
+
+SHIPPING AND FULFILLMENT:
+
+Lisa asked about shipping. Tom said sellers handle their own shipping but we'll integrate with ShipStation to make it easier:
+- Sellers can print shipping labels directly from platform
+- Automatic tracking number updates
+- Shipping cost calculator for buyers
+- Support for USPS, UPS, FedEx
+
+Emma (remote) asked about international shipping. Alex said Phase 2 - start with US only for MVP.
+
+SEARCH AND DISCOVERY:
+
+James emphasized that discovery is crucial for marketplace success. He proposed:
+- Homepage with curated collections
+- "Near You" section showing local sellers
+- Category browsing
+- Search with autocomplete
+- Filters: price range, location (within X miles), seller rating, shipping options
+- Sort by: relevance, price (low to high), newest, best selling
+
+Tom suggested using Algolia for search instead of building our own with Elasticsearch. It's faster to implement and has great features out of the box. Maria agreed - saves us 3-4 weeks of development time.
+
+TRUST AND SAFETY:
+
+This was a big topic. Emma shared concerns from customer success perspective:
+- How do we prevent fraud?
+- What if seller doesn't ship?
+- What about counterfeit products?
+- How do we handle disputes?
+
+Sophie proposed:
+- Seller verification process (already discussed)
+- Hold payment for 7 days after delivery before releasing to seller
+- Buyer protection policy
+- Review system with verified purchase badges
+- Report listing feature
+- Seller performance metrics (response time, shipping time, cancellation rate)
+- Automatic suspension if metrics fall below threshold
+
+Alex added that we should have a "Seller Standards" policy and enforce it strictly.
+
+COMMUNITY FEATURES:
+
+David (remote) suggested adding community features to differentiate from competitors:
+- Seller stories/profiles
+- Behind-the-scenes content
+- Local events calendar
+- Blog with seller spotlights
+- Social media integration
+
+James loved this idea but said it's Phase 2. Focus on core marketplace functionality first.
+
+MOBILE APP:
+
+Rachel asked if we need native mobile apps. Alex said not for MVP - responsive web is enough. Native apps in Phase 2 if we see strong mobile adoption.
+
+TIMELINE DISCUSSION:
+
+Maria presented a timeline:
+- Month 1-2: Core infrastructure, authentication, basic seller/buyer flows
+- Month 3-4: Product listing, search, shopping cart, checkout
+- Month 5: Payment integration, order management, messaging
+- Month 6: Testing, bug fixes, seller onboarding, soft launch
+
+Tom pushed back again saying it's aggressive. After discussion, they agreed:
+- Soft launch in 6 months with limited features
+- Full launch in 8 months
+- Phased rollout: invite-only beta (month 6), public beta (month 7), full launch (month 8)
+
+BUDGET:
+
+Sophie presented budget estimate:
+- Development team: $600K (6 months, 8 people)
+- Infrastructure: $50K (AWS, Stripe, Algolia, etc.)
+- Design and UX: $80K
+- Legal and compliance: $40K
+- Marketing (pre-launch): $100K
+- Contingency: $130K
+- Total: $1M
+
+Alex approved pending CFO review.
+
+CONCERNS AND OPEN QUESTIONS:
+
+1. Tom: "What's our plan for handling high traffic during launch?"
+   ACTION: Kevin to design auto-scaling architecture
+
+2. Lisa: "Do we need to support Internet Explorer?"
+   DECISION: No, modern browsers only (Chrome, Safari, Firefox, Edge)
+
+3. Rachel: "What about accessibility?"
+   DECISION: Must meet WCAG 2.1 Level AA standards
+
+4. Sophie: "How do we handle sales tax?"
+   ACTION: Sophie to research sales tax requirements, may need TaxJar integration
+
+5. Emma: "What's our customer support plan?"
+   ACTION: Emma to create customer support plan, initially use Zendesk
+
+6. David: "When do we start marketing?"
+   DECISION: Start building email list 3 months before launch, social media 2 months before
+
+7. James: "What about seller fees for listing products?"
+   DECISION: No listing fees for MVP, only commission on sales
+
+8. Tom: "Do we need a recommendation engine?"
+   DECISION: Phase 2, start with simple "related products" based on category
+
+9. Lisa: "What about product variations (size, color)?"
+   DECISION: Must support variations in MVP
+
+10. Rachel: "Should sellers be able to offer discounts/coupons?"
+    DECISION: Phase 2, too complex for MVP
+
+RISKS IDENTIFIED:
+
+1. Tight timeline may lead to technical debt
+2. Seller acquisition might be slower than expected
+3. Payment processing issues could delay launch
+4. Competition from established players
+5. Regulatory compliance (sales tax, data privacy)
+6. Scaling challenges if we get sudden traffic spike
+
+MITIGATION STRATEGIES:
+
+- Build with scalability in mind from day 1
+- Start seller outreach 2 months before launch
+- Use proven payment solution (Stripe Connect)
+- Focus on differentiation (local, curated, community)
+- Hire legal consultant for compliance
+- Load testing before launch
+
+NEXT STEPS AND ACTION ITEMS:
+
+1. Maria: Finalize technical architecture document by May 21
+2. Rachel: Complete wireframes for all core flows by May 25
+3. Sophie: Document all functional requirements by May 28
+4. Tom: Set up development environment and CI/CD pipeline by May 24
+5. Lisa: Create component library and design system by June 1
+6. Kevin: Design infrastructure architecture by May 26
+7. James: Create product roadmap with detailed feature specs by May 30
+8. David: Develop go-to-market strategy by June 5
+9. Emma: Create customer support playbook by June 10
+10. Sophie: Research sales tax requirements and recommend solution by May 31
+11. Alex: Get CFO approval for budget by May 20
+12. All: Review and sign off on project charter by June 1
+
+NEXT MEETING:
+Date: May 28, 2026
+Time: 10:00 AM PST
+Agenda: Review architecture, wireframes, and requirements documents
+
+PARKING LOT (items to discuss later):
+- Subscription model for sellers (monthly fee vs commission)
+- Wholesale/bulk ordering features
+- Gift cards and store credit
+- Affiliate program
+- API for third-party integrations
+- White-label solution for other cities
+
+Meeting adjourned at 12:35 PM.
+
+═══════════════════════════════════════════════════════════════════
+
+Minutes prepared by: Sophie Martinez
+Distributed to: All attendees + John Davis (CFO)
+Date distributed: May 14, 2026
