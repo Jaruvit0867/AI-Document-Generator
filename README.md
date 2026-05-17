@@ -1,13 +1,25 @@
-# AI Document Generator
+# Vision Draft
 
-An intelligent document analysis and proposal generation system powered by AI. Upload your requirements documents, and let AI extract structured information, generate technical proposals, create system diagrams, and provide interactive chat capabilities.
+Turning scattered requirements into actionable project plans.
+
+Vision Draft is an AI-powered requirement-to-development planning workspace. Upload requirement documents or paste raw notes, then generate structured project proposals, Mermaid diagrams, implementation-ready task context, and RAG-style document chat from one dashboard.
 
 ![Project Status](https://img.shields.io/badge/status-hackathon%20mvp-orange)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
-## 🎯 Overview
+## Overview
 
-This full-stack application combines modern web technologies with AI capabilities to streamline the process of analyzing requirements documents and generating comprehensive technical proposals. Built for the IBM Hackathon 2026.
+This full-stack application combines a polished Next.js frontend with a FastAPI backend to streamline requirement analysis and proposal generation. It is built for the IBM Hackathon 2026 as a hackathon-ready MVP with a strong demo flow.
+
+## Source And Deployment
+
+- Frontend source code: this repository, mainly [`frontend/`](frontend)
+- Frontend documentation: [`frontend/README.md`](frontend/README.md)
+- Backend hosted API: [`https://backend-hackaton-v2.vercel.app`](https://backend-hackaton-v2.vercel.app)
+- Backend API docs: [`https://backend-hackaton-v2.vercel.app/docs`](https://backend-hackaton-v2.vercel.app/docs)
+- Backend source code: [`https://gitlab.com/jason11123/backend-hackaton-v2`](https://gitlab.com/jason11123/backend-hackaton-v2)
+
+Note: the local [`backend/`](backend) folder is useful as a reference copy, but the canonical backend source is maintained in the GitLab repository above.
 
 ### Key Capabilities
 
@@ -18,12 +30,13 @@ This full-stack application combines modern web technologies with AI capabilitie
 - **RAG-Based Chat**: Ask questions about your documents using retrieval-augmented generation
 - **Multi-Project Management**: Organize and manage multiple projects with separate document collections
 
-## 🏗 Architecture
+## Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                         Frontend                             │
 │  Next.js 16 + React 19 + TypeScript + TailwindCSS          │
+│  Framer Motion + Mermaid + PDF/Word export tooling          │
 │  - Authentication UI                                         │
 │  - Project Management Dashboard                             │
 │  - Document Upload Interface                                │
@@ -39,7 +52,7 @@ This full-stack application combines modern web technologies with AI capabilitie
 │  FastAPI + Python + PostgreSQL + pgvector                   │
 │  - User Authentication (JWT)                                 │
 │  - Project & Document Management                             │
-│  - OpenAI Integration (or compatible providers)             │
+│  - Azure OpenAI / OpenAI-compatible integration             │
 │  - Vector Embeddings (RAG)                                   │
 │  - AI Extraction Service                                     │
 │  - Diagram Generation Service                                │
@@ -50,13 +63,13 @@ This full-stack application combines modern web technologies with AI capabilitie
                   │
 ┌─────────────────▼───────────────────────────────────────────┐
 │                      AI Provider                             │
-│  OpenAI / Azure OpenAI / Local LLM / Other                  │
-│  - GPT-4 for extraction and chat                            │
+│  Azure OpenAI / OpenAI-compatible API                       │
+│  - LLM extraction, proposal generation, chat                │
 │  - text-embedding-3-small for vectors                       │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-## ✨ Features
+## Features
 
 ### 🔐 Authentication & User Management
 - Secure user registration and login
@@ -106,17 +119,17 @@ Automatically generated sections:
 
 ### 📤 Export Capabilities
 - Export proposals as Markdown
+- Export proposals as PDF and Word
 - Download diagrams as images
 - Export chat history
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
 - **Backend**:
-  - Python 3.9+
-  - PostgreSQL 14+ with pgvector extension
-  - OpenAI API key (or compatible provider)
+  - Use the hosted API for the fastest demo setup
+  - For backend development, use the backend source repo linked above
 
 - **Frontend**:
   - Node.js 18+
@@ -129,34 +142,23 @@ git clone <repository-url>
 cd ibm_hackathon
 ```
 
-### 2. Setup Backend
+### 2. Choose Backend API
 
-```bash
-cd backend
+For the current MVP demo, point the frontend to the hosted backend:
 
-# Install dependencies
-pip install -r requirements.txt
-
-# Create database
-createdb doc_generator_db
-
-# Run schema
-psql -U postgres -d doc_generator_db -f schema.sql
-
-# Configure environment
-cp .env.example .env
-# Edit .env with your settings
-
-# Generate secret key
-python generate_secret_key.py
-
-# Run server
-python main.py
+```env
+NEXT_PUBLIC_API_BASE_URL=https://backend-hackaton-v2.vercel.app
 ```
 
-Backend will be available at `http://localhost:8000`
+Backend source code is maintained here:
 
-See [backend/README.md](backend/README.md) for detailed setup instructions.
+[`https://gitlab.com/jason11123/backend-hackaton-v2`](https://gitlab.com/jason11123/backend-hackaton-v2)
+
+If you run a local backend, set:
+
+```env
+NEXT_PUBLIC_API_BASE_URL=http://localhost:8000
+```
 
 ### 3. Setup Frontend
 
@@ -166,8 +168,8 @@ cd frontend
 # Install dependencies
 npm install
 
-# Configure environment
-echo "NEXT_PUBLIC_API_BASE_URL=http://localhost:8000" > .env.local
+# Configure environment for hosted backend
+echo "NEXT_PUBLIC_API_BASE_URL=https://backend-hackaton-v2.vercel.app" > .env.local
 
 # Run development server
 npm run dev
@@ -177,11 +179,12 @@ Frontend will be available at `http://localhost:3000`
 
 See [frontend/README.md](frontend/README.md) for detailed setup instructions.
 
-## 📖 Documentation
+## Documentation
 
-- **[Backend Documentation](backend/README.md)** - API setup, endpoints, and configuration
 - **[Frontend Documentation](frontend/README.md)** - UI components, features, and troubleshooting
-- **[API Documentation](backend/API_DOCUMENTATION.md)** - Complete API reference
+- **[Backend Source Code](https://gitlab.com/jason11123/backend-hackaton-v2)** - Canonical backend repository
+- **[Hosted Backend API Docs](https://backend-hackaton-v2.vercel.app/docs)** - Live FastAPI docs
+- **[Local API Documentation](frontend/API_DOCUMENTATION.md)** - API reference used by the frontend
 - **[Deployment Guide](DEPLOYMENT.md)** - Production deployment instructions
 
 ## 🎮 Demo Workflow
@@ -236,7 +239,7 @@ See [frontend/README.md](frontend/README.md) for detailed setup instructions.
 - **Framework**: FastAPI 0.115+
 - **Language**: Python 3.9+
 - **Database**: PostgreSQL 14+ with pgvector
-- **AI**: OpenAI API (or compatible providers)
+- **AI**: Azure OpenAI / OpenAI-compatible providers
 - **Authentication**: JWT (python-jose)
 - **ORM**: psycopg2 (direct SQL)
 
@@ -245,8 +248,10 @@ See [frontend/README.md](frontend/README.md) for detailed setup instructions.
 - **UI Library**: React 19
 - **Language**: TypeScript 5
 - **Styling**: TailwindCSS 4
+- **Motion**: Framer Motion 12
 - **Diagrams**: Mermaid.js 11.4
 - **Markdown**: react-markdown 9.0
+- **Export**: html2canvas, jsPDF, docx, file-saver
 - **Date Handling**: date-fns 4.1
 
 ## 🔧 Configuration
@@ -260,7 +265,7 @@ DATABASE_URL=postgresql://user:password@localhost:5432/doc_generator_db
 # Security
 SECRET_KEY=your-secret-key-here
 
-# AI Provider (OpenAI or compatible)
+# AI Provider (Azure OpenAI / OpenAI-compatible)
 OPENAI_API_KEY=your-api-key
 OPENAI_BASE_URL=https://api.openai.com/v1
 OPENAI_MODEL=gpt-4
@@ -279,14 +284,16 @@ For production:
 NEXT_PUBLIC_API_BASE_URL=https://backend-hackaton-v2.vercel.app
 ```
 
-## 🌐 Deployment
+## Deployment
 
 ### Backend (Deployed)
 - **URL**: `https://backend-hackaton-v2.vercel.app`
+- **Source Code**: [backend-hackaton-v2 on GitLab](https://gitlab.com/jason11123/backend-hackaton-v2)
+- **API Docs**: [https://backend-hackaton-v2.vercel.app/docs](https://backend-hackaton-v2.vercel.app/docs)
 - **Platform**: Vercel
 - **Database**: PostgreSQL with pgvector
 
-### Frontend (To Deploy)
+### Frontend
 - **Platform**: Vercel (recommended)
 - **Build Command**: `npm run build`
 - **Output Directory**: `.next`
@@ -398,7 +405,7 @@ MIT License - See LICENSE file for details
 ## 🙏 Acknowledgments
 
 - Built for IBM Hackathon 2026
-- Powered by OpenAI GPT-4 and embeddings
+- Powered by Azure OpenAI / OpenAI-compatible generation and embeddings
 - UI components inspired by modern design systems
 - Mermaid.js for diagram rendering
 
@@ -413,14 +420,15 @@ For issues and questions:
 
 ## 🔗 Quick Links
 
-- [Backend README](backend/README.md)
+- [Backend Source Code](https://gitlab.com/jason11123/backend-hackaton-v2)
+- [Hosted Backend API Docs](https://backend-hackaton-v2.vercel.app/docs)
 - [Frontend README](frontend/README.md)
-- [API Documentation](backend/API_DOCUMENTATION.md)
+- [Frontend API Documentation](frontend/API_DOCUMENTATION.md)
 - [Deployment Guide](DEPLOYMENT.md)
 - [Backend API Docs](http://localhost:8000/docs) (when running locally)
 
 ---
 
-**Built with ❤️ for IBM Hackathon 2026**
+**Built for IBM Hackathon 2026**
 
-*Transforming requirements into actionable technical proposals with the power of AI*
+*Turning scattered requirements into actionable project plans*
