@@ -7,6 +7,7 @@ import { Project } from '@/types/api';
 import { ProjectList } from '@/components/projects';
 import { WorkspaceLayout } from '@/components/workspace';
 import { EmptyState, FolderIcon, Button } from '@/components/ui';
+import { BrandLogo } from '@/components/brand/BrandLogo';
 import api from '@/lib/api';
 
 export default function DashboardPage() {
@@ -65,29 +66,11 @@ export default function DashboardPage() {
                 </svg>
               </button>
 
-              <div className="mr-3 flex h-10 w-10 items-center justify-center rounded-xl bg-ink shadow-lg shadow-ink/10">
-                <svg
-                  className="w-6 h-6 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                  />
-                </svg>
-              </div>
-              <div>
-                <h1 className="text-base font-semibold leading-5 text-ink sm:text-lg">
-                  Plan Generator
-                </h1>
-                <p className="hidden text-xs text-ink-faint sm:block">
-                  Requirements to developer-ready plans
-                </p>
-              </div>
+              <BrandLogo
+                size="md"
+                className="max-w-[250px] sm:max-w-none"
+                imageClassName="h-10 w-40"
+              />
             </div>
             <Button
               variant="ghost"

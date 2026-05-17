@@ -17,8 +17,8 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Plan Generator - AI Development Planning",
-  description: "Generate proposals, diagrams, and delivery plans from requirements",
+  title: "Vision Draft - AI Development Planning",
+  description: "Transform requirements into actionable development plans",
 };
 
 export default function RootLayout({

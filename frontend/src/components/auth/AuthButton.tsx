@@ -23,7 +23,7 @@ export const AuthButton: React.FC<AuthButtonProps> = ({
   const variantStyles = {
     primary: `
       bg-accent text-white shadow-accent/25
-      hover:-translate-y-0.5 hover:bg-accent-hover hover:shadow-[0_0_20px_-5px_rgba(124,58,237,0.4)]
+      hover:-translate-y-0.5 hover:bg-accent-hover hover:shadow-[0_0_20px_-5px_rgba(37,99,235,0.35)]
       focus:ring-accent/30 active:translate-y-0
     `,
     secondary: `

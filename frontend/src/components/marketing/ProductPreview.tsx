@@ -1,179 +1,355 @@
 'use client';
 
+import { useRef, type PointerEvent } from 'react';
+import { useMotionValue, useReducedMotion, useSpring, useTransform } from 'framer-motion';
+import { BrandLogo } from '@/components/brand/BrandLogo';
 import { motion } from './Motion';
 
-const pipelineSteps = [
-  { name: 'Upload', icon: 'M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12' },
-  { name: 'Extract', icon: 'M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z' },
-  { name: 'Diagram', icon: 'M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z' },
-  { name: 'Export', icon: 'M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z' },
+const documentTiles = [
+  { label: 'PDF', positionClassName: 'top-7', badgeClassName: 'bg-red-500 text-white shadow-red-500/20', delay: 0 },
+  { label: 'DOCX', positionClassName: 'top-[8.5rem]', badgeClassName: 'bg-blue-600 text-white shadow-blue-500/20', delay: 0.12 },
+  { label: 'TXT', positionClassName: 'top-[16rem]', badgeClassName: 'bg-slate-800 text-white shadow-slate-500/20', delay: 0.24 },
 ];
 
+const connectorLines = [
+  { d: 'M24 30 C78 30 72 70 130 70', end: { x: 130, y: 70 }, delay: 0 },
+  { d: 'M24 152 C74 152 76 158 130 158', end: { x: 130, y: 158 }, delay: 0.12 },
+  { d: 'M24 274 C78 274 72 232 130 232', end: { x: 130, y: 232 }, delay: 0.24 },
+];
+
+const pipelineSteps = [
+  ['Upload', 'Source ready'],
+  ['Index', 'Context prepared'],
+  ['Extract', 'Requirements mapped'],
+  ['Diagram', 'Flows created'],
+  ['Proposal', 'Plan ready'],
+];
+
+const metrics = [
+  ['Documents', '24'],
+  ['Extracted Fields', '156'],
+  ['Ready Outputs', '5'],
+  ['Last Updated', '2h ago'],
+];
+
+const navIcons = [
+  'M3 11.5 12 4l9 7.5M5 10.5V20h14v-9.5',
+  'M4 6.5A2.5 2.5 0 016.5 4H10l2 2h5.5A2.5 2.5 0 0120 8.5V18a2 2 0 01-2 2H6a2 2 0 01-2-2V6.5z',
+  'M7 3h7l3 3v15H7a2 2 0 01-2-2V5a2 2 0 012-2zM14 3v4h4M8 13h8M8 17h5',
+  'M5 5h14v10H8l-3 3V5z',
+  'M12 8a4 4 0 100 8 4 4 0 000-8zM4 12h2m12 0h2M12 4v2m0 12v2',
+];
+
+const FloatingDocument = ({
+  badgeClassName,
+  delay,
+  label,
+  positionClassName,
+}: {
+  badgeClassName: string;
+  delay: number;
+  label: string;
+  positionClassName: string;
+}) => (
+  <motion.div
+    initial={{ opacity: 0, x: -18, y: 8 }}
+    animate={{ opacity: 1, x: 0, y: [0, -8, 0] }}
+    transition={{
+      opacity: { delay, duration: 0.42, ease: 'easeOut' },
+      x: { delay, duration: 0.52, ease: [0.22, 1, 0.36, 1] },
+      y: {
+        delay: delay + 0.28,
+        duration: 2.8,
+        ease: 'easeInOut',
+        repeat: Infinity,
+        repeatType: 'loop',
+      },
+    }}
+    className={`absolute -left-6 hidden h-20 w-16 rounded-2xl border border-white/70 bg-white/90 shadow-xl backdrop-blur-md lg:block ${positionClassName}`}
+  >
+    <div className="absolute right-0 top-0 h-5 w-5 rounded-bl-xl rounded-tr-2xl bg-slate-100" />
+    <div className="absolute left-3 top-3 h-1.5 w-7 rounded-full bg-slate-200" />
+    <span className={`absolute -right-4 top-7 rounded-md px-2 py-1 text-xs font-bold tracking-wide shadow-lg ${badgeClassName}`}>
+      {label}
+    </span>
+  </motion.div>
+);
+
+const ConnectorLines = ({ reduceMotion }: { reduceMotion: boolean }) => (
+  <svg className="pointer-events-none absolute -left-8 top-16 hidden h-72 w-36 lg:block" viewBox="0 0 160 320" fill="none" aria-hidden="true">
+    <defs>
+      <linearGradient id="connectorFlow" x1="24" y1="0" x2="130" y2="0" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stopColor="#93C5FD" stopOpacity="0.45" />
+        <stop offset="0.55" stopColor="#2563EB" stopOpacity="0.95" />
+        <stop offset="1" stopColor="#6D7CFF" stopOpacity="0.95" />
+      </linearGradient>
+      <filter id="connectorGlow" x="-20%" y="-40%" width="140%" height="180%">
+        <feGaussianBlur stdDeviation="2.5" result="blur" />
+        <feMerge>
+          <feMergeNode in="blur" />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
+    </defs>
+
+    {connectorLines.map((line) => (
+      <g key={line.d}>
+        <path
+          d={line.d}
+          stroke="#BFDBFE"
+          strokeWidth="3"
+          strokeDasharray="4 11"
+          strokeLinecap="round"
+          opacity="0.38"
+        />
+        <motion.path
+          d={line.d}
+          stroke="url(#connectorFlow)"
+          strokeWidth="3.5"
+          strokeDasharray="10 10"
+          strokeLinecap="round"
+          filter="url(#connectorGlow)"
+          initial={{ opacity: 0, pathLength: reduceMotion ? 1 : 0 }}
+          animate={
+            reduceMotion
+              ? { opacity: 0.75, pathLength: 1 }
+              : {
+                  opacity: [0.4, 1, 0.4],
+                  pathLength: [0.35, 1, 0.35],
+                  strokeDashoffset: [0, -40],
+                  y: [0, -8, 0],
+                }
+          }
+          transition={{
+            delay: line.delay,
+            duration: 4,
+            ease: [0.22, 1, 0.36, 1],
+            repeat: reduceMotion ? 0 : Infinity,
+            repeatType: 'mirror',
+          }}
+        />
+        <motion.circle
+          cx={line.end.x}
+          cy={line.end.y}
+          r="3.5"
+          fill="#2563EB"
+          initial={{ opacity: 0, scale: 0.7 }}
+          animate={
+            reduceMotion
+              ? { opacity: 0.7, scale: 1 }
+              : {
+                  opacity: [0, 0.85, 0],
+                  scale: [0.7, 1.35, 0.7],
+                  y: [0, -8, 0],
+                }
+          }
+          transition={{
+            delay: line.delay + 0.28,
+            duration: 4,
+            ease: [0.22, 1, 0.36, 1],
+            repeat: reduceMotion ? 0 : Infinity,
+            repeatType: 'mirror',
+          }}
+        />
+      </g>
+    ))}
+  </svg>
+);
+
 export const ProductPreview = () => {
+  const previewRef = useRef<HTMLDivElement>(null);
+  const reduceMotion = useReducedMotion();
+  const shouldReduceMotion = Boolean(reduceMotion);
+  const pointerX = useMotionValue(0);
+  const pointerY = useMotionValue(0);
+  const scaleTarget = useMotionValue(1);
+  const smoothX = useSpring(pointerX, { stiffness: 170, damping: 24, mass: 0.35 });
+  const smoothY = useSpring(pointerY, { stiffness: 170, damping: 24, mass: 0.35 });
+  const scale = useSpring(scaleTarget, { stiffness: 180, damping: 22, mass: 0.35 });
+  const rotateX = useTransform(smoothY, [-0.5, 0.5], [7, -3]);
+  const rotateY = useTransform(smoothX, [-0.5, 0.5], [-9, -1]);
+  const sheenX = useTransform(smoothX, [-0.5, 0.5], [-90, 90]);
+  const sheenY = useTransform(smoothY, [-0.5, 0.5], [-70, 70]);
+
+  const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
+    if (reduceMotion) return;
+
+    const rect = previewRef.current?.getBoundingClientRect();
+    if (!rect) return;
+
+    pointerX.set((event.clientX - rect.left) / rect.width - 0.5);
+    pointerY.set((event.clientY - rect.top) / rect.height - 0.5);
+    scaleTarget.set(1.025);
+  };
+
+  const handlePointerLeave = () => {
+    pointerX.set(0);
+    pointerY.set(0);
+    scaleTarget.set(1);
+  };
+
   return (
-    <div className="relative mx-auto w-full max-w-[350px] overflow-hidden sm:max-w-5xl">
-      {/* Ambient glow */}
-      <div className="absolute -inset-6 rounded-[2rem] bg-accent/[0.07] blur-3xl" />
+    <div className="relative mx-auto w-full max-w-[360px] overflow-visible sm:max-w-5xl">
+      <div className="pointer-events-none absolute -inset-10 rounded-[3rem] bg-[radial-gradient(circle_at_68%_30%,rgba(191,219,254,0.9),transparent_46%),radial-gradient(circle_at_32%_78%,rgba(59,130,246,0.24),transparent_36%)] blur-2xl" />
+      <div className="pointer-events-none absolute -right-12 top-0 hidden h-[28rem] w-[28rem] rounded-full bg-blue-100/80 lg:block" />
 
-      <div className="relative overflow-hidden rounded-2xl border border-border bg-surface-raised/95 shadow-2xl shadow-ink/[0.08] backdrop-blur-sm">
-        {/* Title bar */}
-        <div className="flex items-center justify-between border-b border-border px-5 py-3.5">
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1.5">
-              <span className="h-3 w-3 rounded-full bg-red-400/80" />
-              <span className="h-3 w-3 rounded-full bg-amber-400/80" />
-              <span className="h-3 w-3 rounded-full bg-emerald-400/80" />
+      <ConnectorLines reduceMotion={shouldReduceMotion} />
+
+      {documentTiles.map((doc) => (
+        <FloatingDocument key={doc.label} {...doc} />
+      ))}
+
+      <motion.div
+        ref={previewRef}
+        initial={{ opacity: 0, y: 18 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        onPointerMove={handlePointerMove}
+        onPointerLeave={handlePointerLeave}
+        className="group/preview relative lg:pl-16"
+        style={{ perspective: '1200px' }}
+      >
+        <motion.div
+          className="relative overflow-hidden rounded-[2rem] border border-white/80 bg-white/90 shadow-[0_30px_80px_-30px_rgba(15,23,42,0.35),0_0_0_1px_rgba(37,99,235,0.08)] backdrop-blur-xl will-change-transform"
+          style={{ rotateX, rotateY, rotateZ: -1.5, scale, transformPerspective: 1200 }}
+        >
+          <motion.div
+            aria-hidden="true"
+            className="pointer-events-none absolute -inset-24 z-10 opacity-0 transition-opacity duration-300 group-hover/preview:opacity-100"
+            style={{ x: sheenX, y: sheenY }}
+          >
+            <div className="h-48 w-48 rounded-full bg-white/35 blur-3xl" />
+          </motion.div>
+          <div className="flex items-center justify-between border-b border-blue-100 bg-white/85 px-4 py-3 sm:px-5">
+            <BrandLogo size="sm" priority />
+            <div className="flex items-center gap-3 text-blue-500">
+              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v4m0 10v4m9-9h-4M7 12H3m15.36-6.36l-2.83 2.83M8.47 15.53l-2.83 2.83m12.72 0l-2.83-2.83M8.47 8.47L5.64 5.64" />
+              </svg>
+              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 5v14m7-7H5" />
+              </svg>
             </div>
-            <div className="hidden h-4 w-px bg-border sm:block" />
-            <div className="hidden items-center gap-2 sm:flex">
-              <div className="flex h-6 w-6 items-center justify-center rounded-md bg-ink">
-                <svg className="h-3.5 w-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-              </div>
-              <span className="text-xs font-medium text-ink-muted">Plan Generator Workspace</span>
-            </div>
-          </div>
-          <div className="flex items-center gap-2 text-ink-faint">
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-          </div>
-        </div>
-
-        {/* Main content */}
-        <div className="p-5 sm:p-6">
-          {/* Top: Project header */}
-          <div className="mb-5 flex items-center justify-between">
-            <div>
-              <p className="text-sm font-semibold text-ink">Campus Event Booking Portal</p>
-              <p className="mt-0.5 text-xs text-ink-faint">Requirement analysis in progress</p>
-            </div>
-            <span className="rounded-full bg-accent-soft px-3 py-1 text-xs font-medium text-accent ring-1 ring-accent/20">
-              2 docs uploaded
-            </span>
           </div>
 
-          {/* Pipeline */}
-          <div className="mb-6 grid grid-cols-4 gap-3">
-            {pipelineSteps.map((step, index) => (
-              <motion.div
-                key={step.name}
-                initial={{ opacity: 0.4, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.12, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                className={`relative rounded-xl border p-3.5 transition-all ${
-                  index < 3
-                    ? 'border-success/30 bg-success-soft/50'
-                    : 'border-border bg-surface'
-                }`}
-              >
-                <div className="flex items-center gap-2.5">
-                  <div className={`flex h-7 w-7 items-center justify-center rounded-lg ${
-                    index < 3
-                      ? 'bg-success text-white'
-                      : 'bg-accent text-white'
-                  }`}>
-                    {index < 3 ? (
-                      <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                      </svg>
-                    ) : (
-                      <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 10v6m0 0l-3-3m3 3l3-3" />
-                      </svg>
-                    )}
-                  </div>
-                  <div>
-                    <p className="text-xs font-semibold text-ink">{step.name}</p>
-                    <p className="text-[10px] text-ink-faint">
-                      {index === 0 ? 'Done' : index === 1 ? 'Done' : index === 2 ? 'Done' : 'Ready'}
-                    </p>
-                  </div>
+          <div className="grid min-h-[31rem] grid-cols-[4.25rem_1fr] bg-white/80 sm:grid-cols-[5rem_1fr]">
+            <aside className="flex flex-col items-center gap-4 bg-[#061E45] px-3 py-8 text-white shadow-[18px_0_40px_-35px_rgba(6,30,69,0.8)]">
+              {navIcons.map((path, index) => (
+                <div
+                  key={path}
+                  className={`flex h-9 w-9 items-center justify-center rounded-xl transition-colors ${
+                    index === 0 ? 'bg-white/12 text-white ring-1 ring-white/18' : 'text-blue-100/70'
+                  }`}
+                >
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d={path} />
+                  </svg>
                 </div>
-              </motion.div>
-            ))}
-          </div>
+              ))}
+            </aside>
 
-          {/* Divider */}
-          <div className="mb-5 flex items-center gap-3">
-            <div className="h-px flex-1 bg-border" />
-            <span className="text-[10px] font-semibold uppercase tracking-widest text-ink-faint">Generated Output</span>
-            <div className="h-px flex-1 bg-border" />
-          </div>
+            <div className="min-w-0 p-4 sm:p-6">
+              <p className="text-base font-semibold text-ink">Project Overview</p>
 
-          {/* Bottom: Generated results */}
-          <div className="grid min-w-0 gap-4 sm:grid-cols-[1fr_1fr_1.2fr]">
-            {/* Stats */}
-            {[
-              ['Functional Reqs', '8', 'captured'],
-              ['User Stories', '12', 'drafted'],
-              ['Open Tasks', '18', 'ready'],
-            ].map(([label, value, status]) => (
-              <div key={label} className="rounded-xl border border-border bg-surface p-4">
-                <p className="text-[11px] font-medium uppercase tracking-wide text-ink-faint">{label}</p>
-                <p className="mt-1.5 text-2xl font-bold tracking-tight text-ink">{value}</p>
-                <p className="text-[11px] text-ink-faint">{status}</p>
-              </div>
-            ))}
-
-            {/* Architecture diagram */}
-            <div className="sm:col-span-3 rounded-xl border border-ink/80 bg-ink p-5">
-              <div className="mb-4 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-white">Architecture</p>
-                  <span className="rounded-full bg-success/15 px-2 py-0.5 text-[10px] font-medium text-success">
-                    Auto-rendered
-                  </span>
-                </div>
-                <div className="flex gap-1.5">
-                  {['Frontend', 'API', 'Database'].map((tag) => (
-                    <span key={tag} className="rounded-md border border-white/10 bg-white/5 px-2 py-0.5 text-[10px] font-medium text-white">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-              <div className="flex items-center justify-center gap-4">
-                {[
-                  { name: 'Frontend', color: 'bg-[#c084fc]/20 border-[#c084fc]/40 text-[#d8b4fe]', glow: 'shadow-[0_0_12px_-2px_rgba(192,132,252,0.35)]' },
-                  { name: 'API', color: 'bg-[#34d399]/20 border-[#34d399]/40 text-[#6ee7b7]', glow: 'shadow-[0_0_12px_-2px_rgba(52,211,153,0.35)]' },
-                  { name: 'Database', color: 'bg-[#38bdf8]/20 border-[#38bdf8]/40 text-[#7dd3fc]', glow: 'shadow-[0_0_12px_-2px_rgba(56,189,248,0.35)]' },
-                ].map((node, index) => (
-                  <div key={node.name} className="flex items-center gap-3">
-                    <div className={`flex h-11 w-28 items-center justify-center rounded-lg border px-3 text-xs font-semibold ${node.color} ${node.glow}`}>
-                      {node.name}
-                    </div>
-                    {index < 2 && (
-                      <div className="flex flex-col items-center gap-0.5">
-                        <div className="h-px w-5 bg-white/20" />
-                        <svg className="h-3 w-3 text-white/60" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                        </svg>
-                      </div>
-                    )}
-                  </div>
+              <div className="mt-4 grid gap-3 sm:grid-cols-4">
+                {metrics.map(([label, value], index) => (
+                  <motion.div
+                    key={label}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 + index * 0.06, duration: 0.45 }}
+                    className="rounded-2xl border border-blue-100 bg-white p-3 shadow-sm shadow-blue-900/[0.04]"
+                  >
+                    <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500">{label}</p>
+                    <p className="mt-2 text-xl font-bold tracking-tight text-ink">{value}</p>
+                  </motion.div>
                 ))}
               </div>
-            </div>
-          </div>
 
-          {/* Export bar */}
-          <div className="mt-4 flex items-center justify-between rounded-xl border border-border bg-surface px-4 py-2.5">
-            <div className="flex items-center gap-2 text-xs text-ink-faint">
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-              Export as
-            </div>
-            <div className="flex gap-2">
-              {['PDF', 'Word', 'Markdown'].map((fmt) => (
-                <span key={fmt} className="rounded-md border border-border bg-surface-raised px-2.5 py-1 text-xs font-medium text-ink-muted transition-colors hover:border-accent/30 hover:text-accent">
-                  {fmt}
-                </span>
-              ))}
+              <div className="mt-4 grid gap-4 lg:grid-cols-[0.92fr_1.35fr]">
+                <div className="rounded-2xl border border-blue-100 bg-white p-4 shadow-sm shadow-blue-900/[0.04]">
+                  <p className="text-sm font-semibold text-ink">Processing Pipeline</p>
+                  <div className="mt-5 space-y-4">
+                    {pipelineSteps.map(([title, subtitle], index) => (
+                      <motion.div
+                        key={title}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.18 + index * 0.08, duration: 0.38 }}
+                        className="relative flex gap-3"
+                      >
+                        {index < pipelineSteps.length - 1 && (
+                          <span className="absolute left-4 top-8 h-8 w-px bg-emerald-200" />
+                        )}
+                        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-500 text-white shadow-lg shadow-emerald-500/20">
+                          <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.704 5.29a1 1 0 010 1.42l-7.25 7.25a1 1 0 01-1.42 0l-3.25-3.25a1 1 0 111.42-1.42l2.54 2.55 6.54-6.55a1 1 0 011.42 0z" clipRule="evenodd" />
+                          </svg>
+                        </span>
+                        <span className="min-w-0">
+                          <span className="block text-sm font-semibold text-ink">{title}</span>
+                          <span className="block text-xs text-slate-500">{subtitle}</span>
+                        </span>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <div className="rounded-2xl border border-blue-100 bg-white p-4 shadow-sm shadow-blue-900/[0.04]">
+                    <p className="text-sm font-semibold text-ink">Generated Outputs</p>
+                    <div className="mt-4 rounded-2xl border border-blue-100 bg-gradient-to-br from-white to-blue-50/60 p-4">
+                      <p className="text-sm font-bold tracking-wide text-ink">PROJECT PROPOSAL</p>
+                      <div className="mt-4 space-y-2">
+                        <div className="h-2 w-20 rounded-full bg-accent/45" />
+                        <div className="h-2 rounded-full bg-blue-100" />
+                        <div className="h-2 rounded-full bg-blue-100" />
+                        <div className="h-2 w-4/5 rounded-full bg-blue-100" />
+                      </div>
+                      <div className="mt-5 flex items-center justify-between">
+                        <svg className="h-8 w-20 text-accent" fill="none" viewBox="0 0 96 32" stroke="currentColor" strokeWidth={2}>
+                          <path d="M4 22c8-17 11-17 13 0 2 15 8-18 12-8 4 9 7 7 13 1 7-7 10 11 20 1 8-8 18-2 30-7" strokeLinecap="round" />
+                        </svg>
+                        <span className="rounded-full bg-emerald-50 px-3 py-1 text-[11px] font-semibold text-emerald-600 ring-1 ring-emerald-100">
+                          Extraction complete
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="rounded-2xl border border-blue-100 bg-white p-4 shadow-sm shadow-blue-900/[0.04]">
+                    <p className="text-sm font-semibold text-ink">Timeline Overview</p>
+                    <div className="mt-5 grid grid-cols-4 gap-2 text-center text-[10px] font-semibold text-slate-500">
+                      {['Planning', 'Design', 'Development', 'Deploy'].map((item) => (
+                        <span key={item}>{item}</span>
+                      ))}
+                    </div>
+                    <div className="relative mt-4 h-7">
+                      <div className="absolute left-3 right-3 top-3 h-1.5 rounded-full bg-gradient-to-r from-emerald-400 via-blue-500 to-red-400" />
+                      {[12, 38, 66, 90].map((left, index) => (
+                        <span
+                          key={left}
+                          className={`absolute top-0 flex h-7 w-7 -translate-x-1/2 items-center justify-center rounded-full border-4 border-white shadow-lg ${
+                            index === 0 ? 'bg-emerald-500' : index === 1 ? 'bg-blue-500' : index === 2 ? 'bg-indigo-500' : 'bg-red-500'
+                          }`}
+                          style={{ left: `${left}%` }}
+                        >
+                          <span className="h-2 w-2 rounded-full bg-white" />
+                        </span>
+                      ))}
+                    </div>
+                    <div className="mt-2 grid grid-cols-4 gap-2 text-center text-[10px] font-medium text-slate-400">
+                      {['2 weeks', '3 weeks', '5 weeks', '2 weeks'].map((item, index) => (
+                        <span key={`${item}-${index}`}>{item}</span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </div>
   );
 };

@@ -29,9 +29,9 @@ interface Note {
 type Tool = 'select' | 'pen' | 'note';
 
 const PEN_COLORS = [
-  { value: '#7C3AED', label: 'Violet' },
-  { value: '#DC2626', label: 'Red' },
   { value: '#2563EB', label: 'Blue' },
+  { value: '#DC2626', label: 'Red' },
+  { value: '#7C3AED', label: 'Violet' },
   { value: '#059669', label: 'Green' },
   { value: '#D97706', label: 'Amber' },
   { value: '#0F172A', label: 'Black' },
@@ -61,7 +61,7 @@ export const MermaidDiagram: React.FC<MermaidDiagramProps> = ({ content, id }) =
   // Fullscreen + annotation
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [activeTool, setActiveTool] = useState<Tool>('select');
-  const [penColor, setPenColor] = useState('#7C3AED');
+  const [penColor, setPenColor] = useState('#2563EB');
   const [penSize, setPenSize] = useState(2);
   const [strokes, setStrokes] = useState<Stroke[]>([]);
   const [currentStroke, setCurrentStroke] = useState<Stroke | null>(null);

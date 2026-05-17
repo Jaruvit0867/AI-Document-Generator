@@ -11,11 +11,11 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantStyles: Record<ButtonVariant, string> = {
-  primary: 'bg-accent text-white shadow-sm shadow-accent/25 hover:-translate-y-0.5 hover:bg-accent-hover hover:shadow-[0_0_20px_-5px_rgba(124,58,237,0.4)] active:translate-y-0 active:bg-accent-hover focus:ring-accent/30',
+  primary: 'bg-accent text-white shadow-sm shadow-accent/25 hover:-translate-y-0.5 hover:bg-accent-hover hover:shadow-[0_0_20px_-5px_rgba(37,99,235,0.35)] active:translate-y-0 active:bg-accent-hover focus:ring-accent/30',
   secondary: 'bg-border/50 text-ink hover:bg-border active:bg-border-strong focus:ring-border-strong',
   danger: 'bg-error text-white shadow-sm shadow-error/25 hover:bg-red-700 active:bg-red-800 focus:ring-error/30',
   ghost: 'bg-transparent text-ink-muted hover:bg-border/40 hover:text-ink active:bg-border focus:ring-border-strong',
-  outline: 'bg-surface-raised border border-border text-ink shadow-sm shadow-black/[0.02] hover:-translate-y-0.5 hover:border-border-strong hover:shadow-[0_0_15px_-5px_rgba(124,58,237,0.15)] active:translate-y-0 focus:ring-accent/30',
+  outline: 'bg-surface-raised border border-border text-ink shadow-sm shadow-black/[0.02] hover:-translate-y-0.5 hover:border-border-strong hover:shadow-[0_0_15px_-5px_rgba(37,99,235,0.14)] active:translate-y-0 focus:ring-accent/30',
 };
 
 const sizeStyles: Record<ButtonSize, string> = {

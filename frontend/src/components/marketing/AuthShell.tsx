@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import React from 'react';
+import { BrandLogo } from '@/components/brand/BrandLogo';
 import { motion } from './Motion';
 import { InteractiveGrid } from './InteractiveGrid';
 
@@ -13,16 +14,8 @@ export const AuthShell = ({ children }: { children: React.ReactNode }) => {
 
       <div className="relative mx-auto grid min-h-screen max-w-7xl gap-10 px-5 py-8 sm:px-6 lg:grid-cols-[1fr_0.86fr] lg:px-8">
         <div className="hidden flex-col justify-between rounded-3xl border border-border bg-white/70 p-8 shadow-2xl shadow-ink/[0.04] backdrop-blur-xl lg:flex">
-          <Link href="/" className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-ink text-white">
-              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m5-9v10a2 2 0 01-2 2H6a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h6a2 2 0 012 2z" />
-              </svg>
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-ink">Plan Generator</p>
-              <p className="text-xs text-ink-faint">AI development planning</p>
-            </div>
+          <Link href="/" className="flex items-center">
+            <BrandLogo size="md" priority />
           </Link>
 
           <div className="py-14">
@@ -32,10 +25,10 @@ export const AuthShell = ({ children }: { children: React.ReactNode }) => {
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             >
               <h1 className="max-w-xl text-5xl font-semibold tracking-tight text-ink">
-                Plan faster from the first requirement.
+                Transform requirements into actionable development plans.
               </h1>
               <p className="mt-5 max-w-lg text-base leading-7 text-ink-muted">
-                Convert briefs into proposals, diagrams, and export-ready documentation without rebuilding context from scratch.
+                Sign in to turn source documents into proposals, diagrams, tasks, and export-ready delivery plans.
               </p>
             </motion.div>
 
@@ -65,13 +58,8 @@ export const AuthShell = ({ children }: { children: React.ReactNode }) => {
         <div className="flex items-center justify-center">
           <div className="w-full max-w-md">
             <div className="mb-8 text-center lg:hidden">
-              <Link href="/" className="inline-flex items-center gap-3">
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-ink text-white">
-                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m5-9v10a2 2 0 01-2 2H6a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h6a2 2 0 012 2z" />
-                  </svg>
-                </div>
-                <span className="text-base font-semibold text-ink">Plan Generator</span>
+              <Link href="/" className="inline-flex items-center">
+                <BrandLogo size="md" priority />
               </Link>
             </div>
             <motion.div
@@ -82,11 +70,11 @@ export const AuthShell = ({ children }: { children: React.ReactNode }) => {
             >
               {children}
             </motion.div>
-            <p className="mt-6 inline-flex items-center gap-2 rounded-full bg-surface-raised/80 px-5 py-2 text-xs font-semibold tracking-wide text-ink-muted ring-1 ring-border backdrop-blur-sm" style={{ textShadow: '0 0 12px rgba(124, 58, 237, 0.06)' }}>
+            <p className="mt-6 inline-flex items-center gap-2 rounded-full bg-surface-raised/80 px-5 py-2 text-xs font-semibold tracking-wide text-ink-muted ring-1 ring-border backdrop-blur-sm" style={{ textShadow: '0 0 12px rgba(37, 99, 235, 0.06)' }}>
               <svg className="h-3.5 w-3.5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m5-9v10a2 2 0 01-2 2H6a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h6a2 2 0 012 2z" />
               </svg>
-              Requirement-to-Development Plan Generator
+              Vision Draft workspace
             </p>
           </div>
         </div>

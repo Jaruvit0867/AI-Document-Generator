@@ -203,7 +203,7 @@ export const InteractiveGrid = () => {
 
           ctx.beginPath();
           ctx.arc(x, y, r, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(124, 58, 237, ${alpha})`;
+          ctx.fillStyle = `rgba(37, 99, 235, ${alpha})`;
           ctx.fill();
         }
       }
@@ -212,9 +212,9 @@ export const InteractiveGrid = () => {
       if (nearby.length > 0 && mouseFade > 0.05) {
         const glowRadius = mouseRadius * 0.7;
         const glowGrad = ctx.createRadialGradient(mx, my, 0, mx, my, glowRadius);
-        glowGrad.addColorStop(0, `rgba(124, 58, 237, ${0.035 * mouseFade})`);
-        glowGrad.addColorStop(0.5, `rgba(124, 58, 237, ${0.015 * mouseFade})`);
-        glowGrad.addColorStop(1, 'rgba(124, 58, 237, 0)');
+        glowGrad.addColorStop(0, `rgba(37, 99, 235, ${0.035 * mouseFade})`);
+        glowGrad.addColorStop(0.5, `rgba(37, 99, 235, ${0.015 * mouseFade})`);
+        glowGrad.addColorStop(1, 'rgba(37, 99, 235, 0)');
         ctx.fillStyle = glowGrad;
         ctx.beginPath();
         ctx.arc(mx, my, glowRadius, 0, Math.PI * 2);
