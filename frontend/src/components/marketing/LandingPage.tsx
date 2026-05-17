@@ -117,8 +117,8 @@ export const LandingPage = () => {
             <Reveal>
               <div className="w-full max-w-[350px] sm:max-w-3xl">
                 <h1 className="max-w-full text-4xl font-semibold tracking-tight text-ink sm:text-6xl lg:text-7xl" style={{ textShadow: '0 0 40px rgba(37, 99, 235, 0.08)' }}>
-                  Transform requirements into{' '}
-                  <span className="text-accent" style={{ textShadow: '0 0 20px rgba(37, 99, 235, 0.18), 0 0 40px rgba(37, 99, 235, 0.08)' }}>actionable development plans</span>
+                  Turning scattered requirements into{' '}
+                  <span className="text-accent" style={{ textShadow: '0 0 20px rgba(37, 99, 235, 0.18), 0 0 40px rgba(37, 99, 235, 0.08)' }}>actionable project plans</span>
                 </h1>
                 <p className="mt-6 max-w-full text-lg leading-8 text-ink-muted sm:max-w-2xl" style={{ textShadow: '0 0 20px rgba(37, 99, 235, 0.05)' }}>
                   Vision Draft turns PDFs, DOCX files, and raw notes into project proposals, diagrams, implementation tasks, and export-ready delivery plans in minutes.

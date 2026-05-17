@@ -19,7 +19,7 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: "Vision Draft - AI Development Planning",
-  description: "Transform requirements into actionable development plans",
+  description: "Turning scattered requirements into actionable project plans",
 };
 
 export default function RootLayout({

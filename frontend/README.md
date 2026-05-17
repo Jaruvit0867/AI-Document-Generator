@@ -1,6 +1,6 @@
 # Vision Draft Frontend
 
-Vision Draft is a SaaS-style frontend for turning raw requirements and uploaded documents into actionable development plans. It connects to the FastAPI backend, lets users manage projects, upload source documents, run the AI processing pipeline, review generated proposals and diagrams, chat with project documents, and export deliverables.
+Vision Draft is a SaaS-style frontend for turning scattered requirements and uploaded documents into actionable project plans. It connects to the FastAPI backend, lets users manage projects, upload source documents, run the AI processing pipeline, review generated proposals and diagrams, chat with project documents, and export deliverables.
 
 ## What This App Does
 

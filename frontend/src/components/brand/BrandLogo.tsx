@@ -19,7 +19,7 @@ const sizeStyles: Record<BrandLogoSize, string> = {
 };
 
 export const APP_NAME = 'Vision Draft';
-export const APP_SLOGAN = 'Transform requirements into actionable development plans';
+export const APP_SLOGAN = 'Turning scattered requirements into actionable project plans';
 
 export const BrandLogo = ({
   className = '',

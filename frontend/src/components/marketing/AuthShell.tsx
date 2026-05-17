@@ -25,7 +25,7 @@ export const AuthShell = ({ children }: { children: React.ReactNode }) => {
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             >
               <h1 className="max-w-xl text-5xl font-semibold tracking-tight text-ink">
-                Transform requirements into actionable development plans.
+                Turning scattered requirements into actionable project plans.
               </h1>
               <p className="mt-5 max-w-lg text-base leading-7 text-ink-muted">
                 Sign in to turn source documents into proposals, diagrams, tasks, and export-ready delivery plans.
